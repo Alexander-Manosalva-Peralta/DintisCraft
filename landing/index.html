@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>DentisCraft — Guía y Manual de Usuario</title>
-<meta name="description" content="Guía y manual de usuario oficial de DentisCraft. Asistente clínico dental inteligente con interfaz espacial y control por voz. Proyecto de The Next Crack.">
+<title>DentisCraft — Asistente Clínico de Voz para Odontólogos</title>
+<meta name="description" content="DentisCraft: Asistente clínico dental inteligente con interfaz espacial y control por voz. El odontólogo habla, la historia clínica se escribe sola.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
-   DENTISCRAFT · Guía y Manual de Usuario — The Next Crack
-   Apple HIG layout: jerarquía espacial, materiales translúcidos,
-   springs de amortiguación crítica, canvas 3D interactivo.
+   DENTISCRAFT · Presentación Oficial — The Next Crack
+   Apple HIG: Jerarquía limpia, pitch ejecutivo, cinemática suave,
+   canvas 3D en tiempo real y materiales translúcidos.
    ═══════════════════════════════════════════════════════════ */
 
 :root{
   --sea:   #5EC8AE;   /* Asistente activo / interactivo */
   --ind:   #7C9CE8;   /* Dato estructurado */
-  --amber: #E0B571;   /* Documento emitido */
+  --amber: #E0B571;   /* Documento emitido / Hablando */
   --warn:  #D89A8E;   /* Requiere confirmación */
-  --purp:  #B598E8;   /* Error o ambigüedad */
+  --purp:  #B598E8;   /* Ambigüedad / Error */
 
   --bg:    #05070A;
   --ink:   #F4F6F7;
@@ -79,21 +79,6 @@ a{color:inherit}
 .spot{position:absolute; width:46rem; height:46rem; left:0; top:0; margin:-23rem 0 0 -23rem; border-radius:50%;
   background:radial-gradient(circle, rgba(150,190,180,.10), transparent 62%); filter:blur(30px); will-change:transform}
 
-.has-strip{overflow:hidden}
-.has-strip > .wrap{position:relative; z-index:2}
-.strip{position:absolute; left:0; right:0; z-index:0; pointer-events:none;
-  display:flex; gap:clamp(1rem,2vw,2rem); width:max-content;
-  filter:blur(7px) saturate(70%); opacity:.34;
-  mask-image:linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
-  -webkit-mask-image:linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
-  will-change:transform}
-.strip.top{top:6%}
-.strip.bottom{bottom:6%}
-.frame{width:clamp(13rem,20vw,20rem); aspect-ratio:16/10; flex:none; border-radius:1.25rem;
-  background:linear-gradient(155deg, rgba(255,255,255,.055), rgba(255,255,255,.015));
-  border:1px solid rgba(255,255,255,.07); padding:1.125rem; display:flex; flex-direction:column; justify-content:center}
-.frame svg{width:100%; height:100%}
-
 .grain{position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.035;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
@@ -101,16 +86,16 @@ main{position:relative; z-index:2}
 .wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut)}
 
 /* ── escala tipográfica ── */
-.d1{font-size:clamp(2.75rem, 7.5vw, 6.5rem); line-height:.95; letter-spacing:-.045em; font-weight:600}
-.d2{font-size:clamp(2.1rem, 5.2vw, 4.25rem); line-height:1.02; letter-spacing:-.035em; font-weight:600}
-.d3{font-size:clamp(1.5rem, 2.7vw, 2.25rem); line-height:1.15; letter-spacing:-.025em; font-weight:600}
-.lead{font-size:clamp(1.1rem, 1.1vw + .85rem, 1.5rem); line-height:1.45; letter-spacing:-.012em; color:var(--ink-2); font-weight:400; max-width:38ch}
+.d1{font-size:clamp(2.85rem, 7.8vw, 6.75rem); line-height:.94; letter-spacing:-.045em; font-weight:600}
+.d2{font-size:clamp(2.15rem, 5.4vw, 4.5rem); line-height:1.02; letter-spacing:-.035em; font-weight:600}
+.d3{font-size:clamp(1.5rem, 2.8vw, 2.35rem); line-height:1.15; letter-spacing:-.025em; font-weight:600}
+.lead{font-size:clamp(1.1rem, 1.1vw + .88rem, 1.55rem); line-height:1.45; letter-spacing:-.012em; color:var(--ink-2); font-weight:400; max-width:40ch}
 .kicker{font-family:var(--mono); font-size:.8125rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
 .tint-sea{color:var(--sea)} .tint-amber{color:var(--amber)} .tint-ind{color:var(--ind)} .tint-warn{color:var(--warn)} .tint-purp{color:var(--purp)}
 .dim{color:var(--ink-3)}
 
 section{position:relative}
-.pad{padding-block:clamp(5rem, 12vh, 9.5rem)}
+.pad{padding-block:clamp(5rem, 13vh, 9.5rem)}
 
 /* ── chrome translúcido ── */
 .chrome{position:fixed; top:0; left:0; right:0; height:8rem; z-index:50; pointer-events:none;
@@ -134,7 +119,7 @@ nav.solid .nav-mat{opacity:1}
 .brand{display:flex; align-items:center; gap:.625rem; font-weight:600; letter-spacing:-.02em; font-size:1.0625rem; text-decoration:none}
 .brand svg{width:1.5rem; height:1.5rem; flex:none}
 .nav-mid{position:relative; display:flex; gap:.25rem}
-.nav-mid a{position:relative; padding:.625rem .75rem; min-height:2.75rem; display:flex; align-items:center;
+.nav-mid a{position:relative; padding:.625rem .875rem; min-height:2.75rem; display:flex; align-items:center;
   font-size:.875rem; color:var(--ink-2); text-decoration:none; border-radius:999px; transition:color .3s}
 .nav-mid a:hover, .nav-mid a.here{color:var(--ink)}
 #navPill{position:absolute; top:0; height:100%; border-radius:999px; background:rgba(255,255,255,.09); z-index:-1; opacity:0}
@@ -143,12 +128,12 @@ nav.solid .nav-mat{opacity:1}
   transition:transform .1s ease-out, filter .3s}
 .nav-cta:active{transform:scale(.97)}
 .nav-cta:hover{filter:brightness(1.08)}
-@media(max-width:1040px){.nav-mid{display:none}}
+@media(max-width:960px){.nav-mid{display:none}}
 
 /* ── hero ── */
 .hero{min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center;
   text-align:center; padding:8.5rem var(--gut) 4rem; position:relative}
-.hero-head{max-width:24ch}
+.hero-head{max-width:22ch}
 .word{display:inline-block; will-change:transform,opacity}
 .badge{display:inline-flex; align-items:center; gap:.5rem; padding:.4375rem .875rem; border-radius:999px;
   background:var(--mat); border:1px solid var(--hair); font-family:var(--mono); font-size:.75rem;
@@ -175,10 +160,32 @@ nav.solid .nav-mat{opacity:1}
   display:flex; flex-direction:column; align-items:center; gap:.625rem}
 .scroll-cue span{width:1px; height:2.25rem; background:linear-gradient(var(--hair-2), transparent)}
 
-/* ── declaración con revelado por palabra ── */
-.statement{max-width:32ch; margin-inline:auto; text-align:center}
+/* ── declaración ── */
+.statement{max-width:30ch; margin-inline:auto; text-align:center}
 .statement .w{color:rgba(244,246,247,.13); transition:color .45s ease}
 .statement .w.lit{color:var(--ink)}
+
+/* ── cifras ── */
+.figures{display:grid; grid-template-columns:repeat(3,1fr); gap:0}
+@media(max-width:820px){.figures{grid-template-columns:1fr}}
+.fig{padding:clamp(1.5rem,3vw,2.5rem) clamp(1rem,2vw,2rem)}
+.fig + .fig{border-left:1px solid var(--hair)}
+@media(max-width:820px){.fig + .fig{border-left:0; border-top:1px solid var(--hair)}}
+.fig b{display:block; font-size:clamp(3rem,7vw,5.5rem); line-height:.9; letter-spacing:-.05em; font-weight:600}
+.fig p{margin-top:1rem; font-size:1.0625rem; max-width:24ch}
+
+/* ── tarjetas ejecutivas (los 3 pilares) ── */
+.pillars{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1.25rem, 2vw, 1.75rem); margin-top:3rem}
+@media(max-width:960px){.pillars{grid-template-columns:1fr}}
+.card{border-radius:1.75rem; padding:clamp(1.75rem,2.8vw,2.5rem);
+  background:linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+  border:1px solid var(--hair); backdrop-filter:blur(24px) saturate(140%); -webkit-backdrop-filter:blur(24px) saturate(140%);
+  display:flex; flex-direction:column; justify-content:space-between; min-height:19rem}
+.card .num{font-family:var(--mono); font-size:.8125rem; letter-spacing:.12em; color:var(--sea); margin-bottom:1.5rem}
+.card h3{font-size:1.45rem; letter-spacing:-.025em; font-weight:600; line-height:1.2; margin-bottom:.875rem}
+.card p{font-size:1.0625rem; color:var(--ink-2); line-height:1.5}
+.card .card-foot{margin-top:1.5rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,.07);
+  font-family:var(--mono); font-size:.8125rem; color:var(--ink-3)}
 
 /* ── sección fijada: el dictado ── */
 .pin-track{position:relative}
@@ -196,7 +203,6 @@ nav.solid .nav-mat{opacity:1}
   color:var(--ink-3); margin-bottom:1.25rem; font-weight:400}
 .quote em{font-style:normal; color:var(--sea)}
 
-/* documento */
 .doc{border-radius:1.75rem; padding:clamp(1.5rem,2.6vw,2.25rem);
   background:linear-gradient(160deg, rgba(255,255,255,.085), rgba(255,255,255,.028));
   border:1px solid var(--hair); backdrop-filter:blur(30px) saturate(150%); -webkit-backdrop-filter:blur(30px) saturate(150%);
@@ -229,7 +235,7 @@ nav.solid .nav-mat{opacity:1}
 .tooth.caries{background:rgba(216,154,142,.22); border-color:rgba(216,154,142,.55); color:#F0C6BC}
 .tooth.rest{background:rgba(124,156,232,.2); border-color:rgba(124,156,232,.5); color:#C3D2F5}
 
-/* ── segmentado (estados del asistente visual) ── */
+/* ── segmentado (asistente visual) ── */
 .face-stage{display:grid; grid-template-columns:auto 1fr; gap:clamp(2rem,5vw,5rem); align-items:center}
 @media(max-width:820px){.face-stage{grid-template-columns:1fr; text-align:center; justify-items:center}}
 #faceBig{width:min(20rem,64vw); height:auto}
@@ -245,45 +251,17 @@ nav.solid .nav-mat{opacity:1}
 .state-copy p{opacity:0; transition:opacity .35s ease; position:absolute; max-width:44ch}
 .state-copy p.on{opacity:1; position:relative}
 
-/* ── cifras ── */
-.figures{display:grid; grid-template-columns:repeat(3,1fr); gap:0}
-@media(max-width:820px){.figures{grid-template-columns:1fr}}
-.fig{padding:clamp(1.5rem,3vw,2.5rem) clamp(1rem,2vw,2rem)}
-.fig + .fig{border-left:1px solid var(--hair)}
-@media(max-width:820px){.fig + .fig{border-left:0; border-top:1px solid var(--hair)}}
-.fig b{display:block; font-size:clamp(3rem,7vw,5.5rem); line-height:.9; letter-spacing:-.05em; font-weight:600}
-.fig p{margin-top:1rem; font-size:1.0625rem; max-width:24ch}
-
-/* ── lista editorial ── */
-.rows{border-top:1px solid var(--hair)}
-.erow{display:grid; grid-template-columns:auto 1fr minmax(0,36ch); gap:clamp(1rem,3vw,3rem);
-  align-items:baseline; padding:clamp(1.5rem,3vw,2.25rem) 0; border-bottom:1px solid var(--hair);
-  transition:opacity .4s ease}
-@media(max-width:860px){.erow{grid-template-columns:1fr; gap:.625rem}}
-.erow .tag{font-family:var(--mono); font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); min-width:8rem}
-.erow h3{font-size:clamp(1.3rem,2.2vw,1.85rem); letter-spacing:-.025em; font-weight:600; line-height:1.18}
-.erow p{font-size:1.0625rem; color:var(--ink-2)}
-
-/* ── paneles y tablas de comandos ── */
-.grid-panels{display:grid; grid-template-columns:1fr 1fr; gap:clamp(1.25rem, 2.5vw, 2rem); margin-top:2.5rem}
-@media(max-width:900px){.grid-panels{grid-template-columns:1fr}}
-.panel{border-radius:1.5rem; padding:clamp(1.5rem,2.5vw,2.25rem);
-  background:linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
-  border:1px solid var(--hair); backdrop-filter:blur(24px) saturate(140%); -webkit-backdrop-filter:blur(24px) saturate(140%);
-  display:flex; flex-direction:column; justify-content:space-between}
-.panel h3{font-size:1.4rem; letter-spacing:-.02em; font-weight:600; margin-bottom:.75rem}
-.panel p{font-size:1.0625rem; color:var(--ink-2); line-height:1.5}
-
-.cmd-table{width:100%; border-collapse:collapse; margin-top:1.5rem; font-size:.9375rem}
-.cmd-table th{text-align:left; font-family:var(--mono); font-size:.6875rem; letter-spacing:.12em;
-  text-transform:uppercase; color:var(--ink-3); padding-bottom:.75rem; border-bottom:1px solid var(--hair)}
-.cmd-table td{padding:.875rem 0; border-bottom:1px solid rgba(255,255,255,.05); vertical-align:top}
-.cmd-table td:first-child{font-weight:600; color:var(--ink); width:32%; padding-right:1rem}
-.cmd-table td:last-child{color:var(--ink-2); font-family:var(--mono); font-size:.875rem}
-
-.chip-list{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.25rem}
-.chip{padding:.375rem .75rem; border-radius:999px; background:rgba(255,255,255,.06);
-  border:1px solid var(--hair); font-family:var(--mono); font-size:.8125rem; color:var(--sea)}
+/* ── comandos ejecutivos (fichas sintetizadas) ── */
+.cmd-grid{display:grid; grid-template-columns:1fr 1fr; gap:clamp(1.25rem, 2vw, 1.75rem); margin-top:2.5rem}
+@media(max-width:860px){.cmd-grid{grid-template-columns:1fr}}
+.cmd-card{border-radius:1.5rem; padding:1.75rem;
+  background:linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.015));
+  border:1px solid var(--hair); backdrop-filter:blur(20px)}
+.cmd-card h4{font-size:1.15rem; font-weight:600; letter-spacing:-.02em; margin-bottom:.5rem}
+.cmd-card p{font-size:.9375rem; color:var(--ink-2); margin-bottom:1rem}
+.cmd-pills{display:flex; flex-direction:column; gap:.5rem}
+.cmd-pill{padding:.5rem .875rem; border-radius:.75rem; background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06); font-family:var(--mono); font-size:.8125rem; color:var(--sea)}
 
 /* ── equipo ── */
 .people{display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--hair)}
@@ -300,8 +278,8 @@ nav.solid .nav-mat{opacity:1}
 .person .role{font-family:var(--mono); font-size:.75rem; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3); margin-top:.625rem}
 
 /* ── cierre ── */
-.close{text-align:center; padding-block:clamp(7rem,16vh,12rem)}
-.close .d2{max-width:20ch; margin:1.5rem auto 1.75rem}
+.close{text-align:center; padding-block:clamp(6rem,14vh,10rem)}
+.close .d2{max-width:18ch; margin:1.5rem auto 1.75rem}
 footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
 .foot{display:flex; flex-wrap:wrap; justify-content:space-between; gap:1rem;
   font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; color:var(--ink-3)}
@@ -326,13 +304,12 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   #bgCanvas{opacity:.32}
 }
 @media (prefers-reduced-transparency: reduce){
-  .doc,.nav-mat,.panel{background:#12161B; backdrop-filter:none; -webkit-backdrop-filter:none}
+  .doc,.nav-mat,.card,.cmd-card{background:#12161B; backdrop-filter:none; -webkit-backdrop-filter:none}
   .chrome{backdrop-filter:none; background:rgba(5,7,10,.92)}
-  .strip{opacity:.18}
 }
 @media (prefers-contrast: more){
   :root{--ink-2:#D5DBE0; --ink-3:#9AA4AD; --hair:rgba(255,255,255,.28)}
-  .doc,.nav-mat,.panel{background:#0C1014; border-color:rgba(255,255,255,.4)}
+  .doc,.nav-mat,.card,.cmd-card{background:#0C1014; border-color:rgba(255,255,255,.4)}
 }
 </style>
 </head>
@@ -348,36 +325,7 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   <div class="mesh"></div><div class="vignette"></div>
 </div>
 
-<template id="frames">
-  <div class="frame"><svg viewBox="0 0 200 120" fill="none" stroke="rgba(255,255,255,.32)">
-    <g stroke-width="1.4">
-      <rect x="14" y="26" width="18" height="18" rx="4"/><rect x="36" y="26" width="18" height="18" rx="4"/>
-      <rect x="58" y="26" width="18" height="18" rx="4"/><rect x="80" y="26" width="18" height="18" rx="4"/>
-      <rect x="102" y="26" width="18" height="18" rx="4"/><rect x="124" y="26" width="18" height="18" rx="4"/>
-      <rect x="146" y="26" width="18" height="18" rx="4"/><rect x="168" y="26" width="18" height="18" rx="4"/>
-      <rect x="14" y="50" width="18" height="18" rx="4"/><rect x="36" y="50" width="18" height="18" rx="4"/>
-      <rect x="58" y="50" width="18" height="18" rx="4" stroke="rgba(216,154,142,.75)" fill="rgba(216,154,142,.2)"/>
-      <rect x="80" y="50" width="18" height="18" rx="4"/><rect x="102" y="50" width="18" height="18" rx="4"/>
-      <rect x="124" y="50" width="18" height="18" rx="4" stroke="rgba(124,156,232,.7)" fill="rgba(124,156,232,.16)"/>
-      <rect x="146" y="50" width="18" height="18" rx="4"/><rect x="168" y="50" width="18" height="18" rx="4"/>
-    </g></svg></div>
-
-  <div class="frame"><svg viewBox="0 0 200 120" fill="none">
-    <g stroke="rgba(94,200,174,.55)" stroke-width="3" stroke-linecap="round">
-      <path d="M18 60v10M30 48v34M42 36v58M54 52v26M66 28v74M78 44v42M90 34v62M102 54v22M114 40v50M126 30v70M138 50v30M150 42v44M162 58v14M174 50v30"/>
-    </g></svg></div>
-
-  <div class="frame"><svg viewBox="0 0 200 120" fill="none">
-    <rect x="34" y="10" width="132" height="100" rx="8" stroke="rgba(255,255,255,.22)"/>
-    <g stroke="rgba(255,255,255,.3)" stroke-width="4" stroke-linecap="round">
-      <path d="M50 32h64M50 46h84M50 58h72"/>
-    </g>
-    <g stroke="rgba(224,181,113,.7)" stroke-width="4" stroke-linecap="round"><path d="M50 76h44"/></g>
-    <g stroke="rgba(255,255,255,.3)" stroke-width="4" stroke-linecap="round"><path d="M50 90h80"/></g>
-  </svg></div>
-</template>
 <div class="grain" aria-hidden="true"></div>
-
 <div class="chrome" id="chrome" aria-hidden="true"></div>
 
 <nav id="nav">
@@ -390,28 +338,26 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   </a>
   <div class="nav-mid" id="navMid">
     <div id="navPill"></div>
-    <a href="#que-es">Que es</a>
-    <a href="#asistente">Asistente Visual</a>
-    <a href="#voz">Control por Voz</a>
+    <a href="#proposito">Proposito</a>
+    <a href="#pilares">Capacidades</a>
+    <a href="#dictado">Dictado en Vivo</a>
+    <a href="#asistente">Asistente</a>
     <a href="#comandos">Comandos</a>
-    <a href="#dictado">Dictado</a>
-    <a href="#pdf">Historial PDF</a>
-    <a href="#requisitos">Requisitos</a>
     <a href="#equipo">Equipo</a>
   </div>
-  <a href="#dictado" class="nav-cta">Ver el dictado</a>
+  <a href="#dictado" class="nav-cta">Ver demostracion</a>
 </nav>
 
 <main id="top">
 
-<!-- ══════════ HERO ══════════ -->
+<!-- ══════════ HERO (PITCH PRINCIPAL) ══════════ -->
 <section class="hero">
-  <div class="badge"><i></i> The Next Crack · 2026 · Guía y Manual de Usuario</div>
-  <h1 class="d1 hero-head" id="heroHead">DentisCraft. <span class="tint-sea">Guía y Manual de Usuario.</span></h1>
-  <p class="lead">DentisCraft es un asistente clínico dental inteligente con interfaz espacial y control por voz diseñado para que el odontólogo pueda registrar fichas clínicas, odontogramas y presupuestos sin tocar el teclado ni el ratón durante la consulta odontológica.</p>
+  <div class="badge"><i></i> The Next Crack · 2026 · Pitch Oficial</div>
+  <h1 class="d1 hero-head" id="heroHead">El odontologo habla. <span class="tint-sea">La historia clinica se escribe sola.</span></h1>
+  <p class="lead">DentisCraft es un asistente clinico dental inteligente con interfaz espacial y control por voz. Registra fichas clinicas, odontogramas y presupuestos sin tocar el teclado ni el raton durante la consulta.</p>
   <div class="hero-cta">
-    <a href="#dictado" class="btn btn-fill">Ver el dictado en vivo</a>
-    <a href="#que-es" class="btn btn-plain">Que es DentisCraft</a>
+    <a href="#dictado" class="btn btn-fill">Ver demostracion en vivo</a>
+    <a href="#pilares" class="btn btn-plain">Como funciona</a>
   </div>
 
   <div class="orb-wrap" id="orbWrap">
@@ -428,261 +374,63 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   <div class="scroll-cue"><span></span>Desliza</div>
 </section>
 
-<!-- ══════════ DECLARACIÓN ══════════ -->
-<section class="pad" id="que-es">
+<!-- ══════════ PROPÓSITO E INSIGHT ══════════ -->
+<section class="pad" id="proposito">
   <div class="wrap">
-    <p class="kicker rise" style="text-align:center; margin-bottom:2.5rem">Propósito Clínico</p>
-    <h2 class="d2 statement" id="stmt">En una consulta dental, el odontólogo tiene las manos enguantadas e higienizadas. DentisCraft permite dictar en lenguaje natural todo el proceso de atención médica.</h2>
+    <p class="kicker rise" style="text-align:center; margin-bottom:2.5rem">La Realidad Clinica</p>
+    <h2 class="d2 statement" id="stmt">En una consulta dental, las manos estan enguantadas e higienizadas. DentisCraft permite dictar en habla natural todo el proceso sin romper la esterilidad.</h2>
   </div>
 </section>
 
-<!-- ══════════ CIFRAS ══════════ -->
+<!-- ══════════ CIFRAS DE IMPACTO ══════════ -->
 <section class="pad" style="padding-top:0">
   <div class="wrap">
     <div class="figures rise">
-      <div class="fig"><b data-n="15">0</b><p>minutos por paciente ahorrados en transcripción manual.</p></div>
-      <div class="fig"><b data-n="100" data-s="%">0</b><p>bioseguridad manos libres durante la intervención.</p></div>
-      <div class="fig"><b class="tint-amber" data-n="3" data-s=" s">0</b><p>para emitir la historia clínica oficial en formato PDF.</p></div>
+      <div class="fig"><b data-n="15">0</b><p>minutos por paciente ahorrados en documentacion manual.</p></div>
+      <div class="fig"><b data-n="100" data-s="%">0</b><p>atencion manos libres con bioseguridad quirurgica.</p></div>
+      <div class="fig"><b class="tint-amber" data-n="3" data-s=" s">0</b><p>para emitir la historia clinica y odontograma en PDF.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ CAPACIDADES EDITORIALES (QUE ES) ══════════ -->
-<section class="pad has-strip" style="padding-top:0">
+<!-- ══════════ LOS 3 PILARES CLAVE (LO MEJOR) ══════════ -->
+<section class="pad" id="pilares" style="padding-top:0">
   <div class="wrap">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Funcionalidades Principales</p>
-    <h2 class="d2 rise d-1" style="max-width:18ch; margin-bottom:3.5rem">Que es DentisCraft y para que sirve.</h2>
+    <p class="kicker rise" style="margin-bottom:1.5rem">Lo Esencial</p>
+    <h2 class="d2 rise d-1" style="max-width:18ch">Tres pilares de innovacion en el sillon dental.</h2>
 
-    <div class="rows">
-      <div class="erow rise">
-        <div class="tag">01 · Paciente</div>
-        <h3>Datos de filiación</h3>
-        <p>Nombre, edad, teléfono, dirección, ocupación y lugar de nacimiento registrados sin tocar el teclado.</p>
+    <div class="pillars rise">
+      <div class="card">
+        <div>
+          <div class="num">01 · VOZ CLINICA INTELIGENTE</div>
+          <h3>Habla natural con terminologia dental</h3>
+          <p>Dicta datos de filiacion, anamnesis, antecedentes y habitos. La inteligencia artificial clasifica cada dato en su respectivo campo en tiempo real.</p>
+        </div>
+        <div class="card-foot">Wake words: "Hola DentisCraft" · "Asistente"</div>
       </div>
-      <div class="erow rise">
-        <div class="tag">02 · Anamnesis</div>
-        <h3>Historia médica y exploración</h3>
-        <p>Alergias, antecedentes patológicos, hábitos y motivo de consulta estructurados automáticamente.</p>
+
+      <div class="card">
+        <div>
+          <div class="num">02 · ODONTOGRAMA FDI REACTIVO</div>
+          <h3>Nombras la pieza y se marca al instante</h3>
+          <p>Reconocimiento de piezas FDI (11 a 48) y nombres anatomicos. Registra caries, obturaciones y ausencias con marcado visual automatico.</p>
+        </div>
+        <div class="card-foot">Soporta caras oclusal, mesial, distal y vestibular</div>
       </div>
-      <div class="erow rise">
-        <div class="tag">03 · Odontograma</div>
-        <h3>Odontograma gráfico interactivo</h3>
-        <p>Marcado de caries, restauraciones, piezas ausentes o sanas por número FDI o por cara dental.</p>
-      </div>
-      <div class="erow rise">
-        <div class="tag">04 · Presupuesto</div>
-        <h3>Plan de tratamiento</h3>
-        <p>Selección de procedimientos odontológicos del catálogo predefinido y cálculo automático de montos.</p>
-      </div>
-      <div class="erow rise">
-        <div class="tag">05 · Seguimiento</div>
-        <h3>Evolución clínica y pagos</h3>
-        <p>Registro de diagnósticos, tratamientos realizados, pagos a cuenta y cálculo del saldo pendiente.</p>
-      </div>
-      <div class="erow rise">
-        <div class="tag">06 · Documento</div>
-        <h3>PDF y despacho por correo</h3>
-        <p>Generación automática del historial clínico oficial en formato A4 de dos páginas con opción de envío directo al paciente.</p>
+
+      <div class="card">
+        <div>
+          <div class="num">03 · DOCUMENTO Y PDF OFICIAL</div>
+          <h3>Historial A4 de 2 paginas listo para firmar</h3>
+          <p>Calcula presupuestos, pagos y saldos. Emite el historial oficial con cabecera y odontograma grafico a color, listo para descargar o enviar por correo.</p>
+        </div>
+        <div class="card-foot">Formato oficial con recuadro de conformidad</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ ASISTENTE VISUAL (ASCII & SPATIAL UI) ══════════ -->
-<section class="pad" id="asistente">
-  <div class="wrap face-stage">
-    <div style="position:relative; display:grid; place-items:center">
-      <div class="orb-halo" id="halo2" style="width:min(26rem,80vw)"></div>
-      <svg id="faceBig" viewBox="0 0 260 260" fill="none" aria-label="Estados del asistente">
-        <circle cx="130" cy="130" r="112" stroke="rgba(255,255,255,.07)"/>
-        <circle id="fRing" cx="130" cy="130" r="94" stroke="rgba(94,200,174,.38)" stroke-width="1.5" stroke-dasharray="2.5 11" stroke-linecap="round"/>
-        <ellipse id="fL" cx="100" cy="122" rx="10" ry="19" fill="#5EC8AE"/>
-        <ellipse id="fR" cx="160" cy="122" rx="10" ry="19" fill="#5EC8AE"/>
-        <path id="fM" d="M103 164 Q130 178 157 164" stroke="#5EC8AE" stroke-width="3.6" stroke-linecap="round"/>
-      </svg>
-    </div>
-
-    <div>
-      <p class="kicker rise" style="margin-bottom:1.5rem">Arquitectura Visual</p>
-      <h2 class="d2 rise d-1" style="max-width:18ch">Asistente Visual ASCII & Spatial UI.</h2>
-      <p class="lead rise d-2" style="margin-top:1.5rem">Interfaz con estética Apple Vision Pro / Cyberpunk. Cuenta con una cara generada en tiempo real que reacciona a cada evento y feedback por voz (TTS) para confirmar las acciones sin desviar la mirada del campo operatorio.</p>
-
-      <div class="seg rise d-3" id="seg" role="tablist" aria-label="Estados del asistente">
-        <div id="segPill"></div>
-        <button class="on" data-s="listening">Escuchando</button>
-        <button data-s="thinking">Procesando</button>
-        <button data-s="speaking">Hablando</button>
-        <button data-s="done">Exito</button>
-        <button data-s="alert">Confundido</button>
-      </div>
-
-      <div class="state-copy">
-        <p class="on" data-s="listening"><span class="tint-sea">Escuchando (listening):</span> Ondas de voz reactivas al volumen del micrófono mientras el odontólogo dicta.</p>
-        <p data-s="thinking"><span class="tint-ind">Procesando / Pensando (thinking):</span> Movimiento de ojos y circuitos procesando el dictado y la terminología clínica.</p>
-        <p data-s="speaking"><span class="tint-amber">Hablando (speaking):</span> Sincronización labial dinámica cuando el asistente responde por síntesis de voz (TTS).</p>
-        <p data-s="done"><span class="tint-sea">Exito (success):</span> Expresión de confirmación al guardar un dato o acción en la ficha clínica.</p>
-        <p data-s="alert"><span class="tint-purp">Confundido / Error (confused):</span> Expresión de duda si el comando o término no fue claro, solicitando confirmación.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ CONTROL POR VOZ ══════════ -->
-<section class="pad" id="voz">
-  <div class="wrap">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Instrucciones de Uso</p>
-    <h2 class="d2 rise d-1" style="max-width:18ch; margin-bottom:2.5rem">Como usar el control por voz.</h2>
-
-    <div class="grid-panels rise">
-      <div class="panel">
-        <div>
-          <p class="kicker" style="margin-bottom:.5rem">Paso 1</p>
-          <h3>Iniciar la Sesión</h3>
-          <p>Al cargar la aplicación en el navegador, concede el permiso de acceso al micrófono. Puedes activar o desactivar la escucha pulsando el botón flotante del micrófono o presionando la barra espaciadora.</p>
-        </div>
-        <div class="chip-list">
-          <span class="chip">Permiso de microfono</span>
-          <span class="chip">Boton flotante</span>
-          <span class="chip">Barra espaciadora</span>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div>
-          <p class="kicker" style="margin-bottom:.5rem">Paso 2</p>
-          <h3>Activación por Voz (Wake Word)</h3>
-          <p>Para comenzar a dictar, puedes llamar al asistente con cualquiera de las frases clave predefinidas o dictar el primer dato de forma continua.</p>
-        </div>
-        <div class="chip-list">
-          <span class="chip">"Hola DentisCraft"</span>
-          <span class="chip">"DentisCraft"</span>
-          <span class="chip">"Asistente"</span>
-          <span class="chip">"DentisCraft, el paciente es Juan Perez"</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ COMANDOS Y EJEMPLOS DE DICTADO ══════════ -->
-<section class="pad" id="comandos">
-  <div class="wrap">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Referencia de Comandos</p>
-    <h2 class="d2 rise d-1" style="max-width:20ch; margin-bottom:1rem">Comandos y ejemplos de dictado.</h2>
-    <p class="lead rise d-2" style="margin-bottom:3rem">El sistema reconoce dictados individuales o frases continuas compuestas estructurándolas en su campo correspondiente.</p>
-
-    <!-- Panel 1: Datos del Paciente -->
-    <div class="panel rise" style="margin-bottom:2rem">
-      <h3>1. Datos del Paciente</h3>
-      <p>Dictado de filiación general y datos de contacto.</p>
-      <table class="cmd-table">
-        <thead><tr><th>Campo</th><th>Ejemplo de lo que puedes decir</th></tr></thead>
-        <tbody>
-          <tr><td>Nombre</td><td>"Nombre Carlos Ortiz Ramirez" o "El paciente se llama Ana Morales"</td></tr>
-          <tr><td>Edad</td><td>"Edad 35" o "Tiene cuarenta y dos anos"</td></tr>
-          <tr><td>Fecha de nacimiento</td><td>"Fecha de nacimiento 15 de mayo de 1992"</td></tr>
-          <tr><td>Lugar de nacimiento</td><td>"Lugar de nacimiento Lima Peru"</td></tr>
-          <tr><td>Ocupacion</td><td>"Ocupacion docente" o "Trabaja como arquitecto"</td></tr>
-          <tr><td>Direccion</td><td>"Direccion Avenida Grau 245"</td></tr>
-          <tr><td>Telefono</td><td>"Telefono 987654321" o "Celular 987654321"</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Panel 2: Antecedentes y Exploración -->
-    <div class="panel rise" style="margin-bottom:2rem">
-      <h3>2. Antecedentes y Exploracion Clinica</h3>
-      <p>Registro de anamnesis, historia médica y hallazgos iniciales.</p>
-      <table class="cmd-table">
-        <thead><tr><th>Seccion</th><th>Ejemplo de dictado</th></tr></thead>
-        <tbody>
-          <tr><td>Motivo de consulta</td><td>"Motivo de consulta dolor intenso al masticar en molar superior"</td></tr>
-          <tr><td>Alergias</td><td>"Alergia a la penicilina" o "Sin alergias conocidas"</td></tr>
-          <tr><td>Antecedentes</td><td>"Antecedentes hipertension arterial controlada" o "Sin antecedentes"</td></tr>
-          <tr><td>Habitos</td><td>"Habitos bruxismo nocturno y consumo ocasional de tabaco"</td></tr>
-          <tr><td>Inspeccion General</td><td>"Inspeccion general paciente lucido y orientado en tiempo y espacio"</td></tr>
-          <tr><td>Exploracion Bucal</td><td>"Exploracion bucal encias inflamadas a nivel de molares inferiores"</td></tr>
-          <tr><td>Observaciones</td><td>"Observaciones control en dos semanas para evaluar evolucion"</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Paneles 3 y 4 en grilla -->
-    <div class="grid-panels rise" style="margin-top:0; margin-bottom:2rem">
-      <div class="panel">
-        <div>
-          <h3>3. Odontograma por Voz</h3>
-          <p>Utiliza notación internacional FDI (11 a 48) o nombres anatómicos:</p>
-          <table class="cmd-table">
-            <thead><tr><th>Accion</th><th>Ejemplo de comando</th></tr></thead>
-            <tbody>
-              <tr><td>Marcar Caries</td><td>"Diente 47 caries oclusal" / "Pieza 16 caries mesial y oclusal"</td></tr>
-              <tr><td>Restaurado</td><td>"Pieza 24 restaurado oclusodistal" / "Diente 36 obturacion resina"</td></tr>
-              <tr><td>Ausente</td><td>"Pieza 18 ausente" / "Diente 28 extraido"</td></tr>
-              <tr><td>Sano / Limpiar</td><td>"Diente 47 sano" / "Limpiar pieza 16"</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div>
-          <h3>4. Presupuesto y Tratamiento</h3>
-          <p>Selección y cálculo de procedimientos del catálogo clínico:</p>
-          <table class="cmd-table">
-            <thead><tr><th>Accion</th><th>Ejemplo de comando</th></tr></thead>
-            <tbody>
-              <tr><td>Presupuesto base</td><td>"Presupuesto profilaxis y fluorizacion"</td></tr>
-              <tr><td>Agregar item</td><td>"Agregar curacion con resina y radiografia periapical"</td></tr>
-              <tr><td>Quitar item</td><td>"Quitar blanqueamiento"</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Paneles 5, 6 y 7 en grilla -->
-    <div class="grid-panels rise" style="margin-top:0">
-      <div class="panel">
-        <div>
-          <h3>5. Evolucion Clinica y Pagos</h3>
-          <p>Para asentar sesiones de control o seguimiento:</p>
-          <p style="font-family:var(--mono); font-size:.875rem; color:var(--sea); margin-top:1rem">
-            "Evolucion diagnostico caries oclusal tratamiento curacion con resina a cuenta 50 saldo 30"
-          </p>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div>
-          <h3>6. Navegacion y Correccion</h3>
-          <table class="cmd-table" style="margin-top:.5rem">
-            <tbody>
-              <tr><td>Corregir campo</td><td>"Corregir edad 38" / "Cambiar telefono a 912345678"</td></tr>
-              <tr><td>Navegacion</td><td>"Siguiente" / "Paso anterior"</td></tr>
-              <tr><td>Instrucciones</td><td>"Repite" / "Que falta"</td></tr>
-              <tr><td>Limpieza</td><td>"Borrar alergias" / "Limpiar odontograma"</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Panel 7: Finalizar -->
-    <div class="panel rise" style="margin-top:2rem">
-      <h3>7. Finalizar y Generar Documento</h3>
-      <p>Cuando concluya la consulta odontológica:</p>
-      <ol style="margin:1rem 0 0 1.5rem; color:var(--ink-2); font-size:1rem; line-height:1.7">
-        <li>Di: <strong style="color:var(--sea); font-family:var(--mono)">"Finalizar documento"</strong> o <strong style="color:var(--sea); font-family:var(--mono)">"Eso seria todo"</strong>.</li>
-        <li>El sistema cambiara a la vista de Ficha Clinica y Odontograma Oficial.</li>
-        <li>El asistente preguntara si deseas enviar el documento al correo del paciente (puedes dictar: <em>"juan punto perez arroba gmail punto com"</em>) o descargar directamente el archivo PDF pulsando <strong>"Descargar PDF"</strong>.</li>
-      </ol>
-    </div>
-
-  </div>
-</section>
-
-<!-- ══════════ DICTADO FIJADO POR SCROLL ══════════ -->
+<!-- ══════════ DEMOSTRACIÓN EN VIVO (STICKY PIN) ══════════ -->
 <section id="dictado">
   <div class="pin-track" id="pinTrack" style="height:520vh">
     <div class="pin">
@@ -729,64 +477,89 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   </div>
 </section>
 
-<!-- ══════════ HISTORIAL CLÍNICO (PDF GENERADO) ══════════ -->
-<section class="pad" id="pdf">
-  <div class="wrap">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Documentacion Oficial</p>
-    <h2 class="d2 rise d-1" style="max-width:20ch; margin-bottom:1rem">Que contiene el Historial Clinico (PDF Generado).</h2>
-    <p class="lead rise d-2" style="margin-bottom:3rem">El documento generado cumple con el formato estandar de historial clinico odontologico oficial en formato A4 de 2 paginas.</p>
+<!-- ══════════ ASISTENTE VISUAL ESPACIAL ══════════ -->
+<section class="pad" id="asistente">
+  <div class="wrap face-stage">
+    <div style="position:relative; display:grid; place-items:center">
+      <div class="orb-halo" id="halo2" style="width:min(26rem,80vw)"></div>
+      <svg id="faceBig" viewBox="0 0 260 260" fill="none" aria-label="Estados del asistente">
+        <circle cx="130" cy="130" r="112" stroke="rgba(255,255,255,.07)"/>
+        <circle id="fRing" cx="130" cy="130" r="94" stroke="rgba(94,200,174,.38)" stroke-width="1.5" stroke-dasharray="2.5 11" stroke-linecap="round"/>
+        <ellipse id="fL" cx="100" cy="122" rx="10" ry="19" fill="#5EC8AE"/>
+        <ellipse id="fR" cx="160" cy="122" rx="10" ry="19" fill="#5EC8AE"/>
+        <path id="fM" d="M103 164 Q130 178 157 164" stroke="#5EC8AE" stroke-width="3.6" stroke-linecap="round"/>
+      </svg>
+    </div>
 
-    <div class="grid-panels rise">
-      <div class="panel">
-        <div>
-          <p class="kicker" style="margin-bottom:.5rem">Estructura</p>
-          <h3>Pagina 1</h3>
-          <ul style="margin:1rem 0 0 1.25rem; color:var(--ink-2); font-size:1rem; line-height:1.8">
-            <li>Membrete y cabecera de la clinica dental.</li>
-            <li>Ficha de datos de filiacion del paciente.</li>
-            <li>Anamnesis: antecedentes patologicos, alergias, habitos y examen general.</li>
-            <li>Odontograma completo (cuadrantes superiores e inferiores) con simbologia en color de piezas y superficies.</li>
-          </ul>
-        </div>
+    <div>
+      <p class="kicker rise" style="margin-bottom:1.5rem">Interfaz Espacial</p>
+      <h2 class="d2 rise d-1" style="max-width:16ch">Una cara que confirma sin distraer.</h2>
+      <p class="lead rise d-2" style="margin-top:1.5rem">Estetica Apple Vision Pro. El asistente reacciona con gestos en tiempo real y feedback verbal por voz (TTS) para dar total certeza al doctor sin apartar la mirada del paciente.</p>
+
+      <div class="seg rise d-3" id="seg" role="tablist" aria-label="Estados del asistente">
+        <div id="segPill"></div>
+        <button class="on" data-s="listening">Escuchando</button>
+        <button data-s="thinking">Procesando</button>
+        <button data-s="speaking">Hablando</button>
+        <button data-s="done">Exito</button>
+        <button data-s="alert">Confirmar</button>
       </div>
 
-      <div class="panel">
-        <div>
-          <p class="kicker" style="margin-bottom:.5rem">Estructura</p>
-          <h3>Pagina 2</h3>
-          <ul style="margin:1rem 0 0 1.25rem; color:var(--ink-2); font-size:1rem; line-height:1.8">
-            <li>Motivo de consulta y diagnostico clinico.</li>
-            <li>Tabla de Presupuesto y Plan de Tratamiento con totales calculados.</li>
-            <li>Tabla de Evolucion Clinica y Control de Pagos (Fecha, Diagnostico, Tratamiento, A Cuenta, Saldo).</li>
-            <li>Recuadro para firma del odontologo tratante y firma de conformidad del paciente.</li>
-          </ul>
-        </div>
+      <div class="state-copy">
+        <p class="on" data-s="listening"><span class="tint-sea">Escuchando:</span> Ondas de voz reactivas al volumen del microfono durante el dictado.</p>
+        <p data-s="thinking"><span class="tint-ind">Procesando:</span> Interpretacion semantica y estructuracion en la ficha medica.</p>
+        <p data-s="speaking"><span class="tint-amber">Hablando (TTS):</span> Confirmacion verbal o lectura guiada del siguiente paso.</p>
+        <p data-s="done"><span class="tint-sea">Exito:</span> Registro completado con marca de tiempo.</p>
+        <p data-s="alert"><span class="tint-purp">Confirmar:</span> Solicitud de aclaracion ante un comando o termino ambiguo.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ REQUISITOS PARA EL USUARIO ══════════ -->
-<section class="pad" id="requisitos" style="padding-top:0">
+<!-- ══════════ COMANDOS RÁPIDOS PARA PRESENTACIÓN ══════════ -->
+<section class="pad" id="comandos">
   <div class="wrap">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Especificaciones Tecnicas</p>
-    <h2 class="d2 rise d-1" style="max-width:18ch; margin-bottom:3rem">Requisitos para el usuario.</h2>
+    <p class="kicker rise" style="margin-bottom:1.5rem">Flexibilidad de Dictado</p>
+    <h2 class="d2 rise d-1" style="max-width:18ch; margin-bottom:1rem">Ejemplos rapidos de comandos.</h2>
+    <p class="lead rise d-2" style="margin-bottom:2.5rem">Reconoce frases continuas o dictados directos para cada etapa de la atencion.</p>
 
-    <div class="rows">
-      <div class="erow rise">
-        <div class="tag">Navegador</div>
-        <h3>Navegador recomendado</h3>
-        <p>Google Chrome, Microsoft Edge o cualquier navegador basado en Chromium (con soporte nativo para Web Speech API).</p>
+    <div class="cmd-grid rise">
+      <div class="cmd-card">
+        <h4>Filiacion y Anamnesis</h4>
+        <p>Datos generales y antecedentes clinicos:</p>
+        <div class="cmd-pills">
+          <div class="cmd-pill">"Nombre Carlos Ortiz Ramirez, edad 35"</div>
+          <div class="cmd-pill">"Motivo de consulta dolor intenso al masticar"</div>
+          <div class="cmd-pill">"Alergia a la penicilina, antecedentes hipertension"</div>
+        </div>
       </div>
-      <div class="erow rise">
-        <div class="tag">Permisos</div>
-        <h3>Permisos de microfono</h3>
-        <p>Habilitar el acceso al microfono en los ajustes de privacidad del navegador al cargar la aplicacion.</p>
+
+      <div class="cmd-card">
+        <h4>Odontograma y Tratamiento</h4>
+        <p>Marcado FDI y plan de presupuesto:</p>
+        <div class="cmd-pills">
+          <div class="cmd-pill">"Diente 47 caries oclusal"</div>
+          <div class="cmd-pill">"Pieza 24 restaurado oclusodistal"</div>
+          <div class="cmd-pill">"Presupuesto profilaxis y curacion con resina"</div>
+        </div>
       </div>
-      <div class="erow rise">
-        <div class="tag">Entorno</div>
-        <h3>Entorno acustico</h3>
-        <p>Se recomienda un microfono con buena captacion o auriculares con microfono para minimizar el ruido ambiente durante la consulta.</p>
+
+      <div class="cmd-card">
+        <h4>Evolucion y Pagos</h4>
+        <p>Seguimiento de sesion y balance de caja:</p>
+        <div class="cmd-pills">
+          <div class="cmd-pill">"Evolucion diagnostico pulpitis, curacion realizada"</div>
+          <div class="cmd-pill">"A cuenta 50 saldo 30"</div>
+        </div>
+      </div>
+
+      <div class="cmd-card">
+        <h4>Finalizacion y Despacho</h4>
+        <p>Emision del historial clinico oficial:</p>
+        <div class="cmd-pills">
+          <div class="cmd-pill">"Finalizar documento" o "Eso seria todo"</div>
+          <div class="cmd-pill">"Enviar a juan.perez@gmail.com" / "Descargar PDF"</div>
+        </div>
       </div>
     </div>
   </div>
@@ -795,7 +568,7 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
 <!-- ══════════ EQUIPO ══════════ -->
 <section class="pad" id="equipo">
   <div class="wrap">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Equipo</p>
+    <p class="kicker rise" style="margin-bottom:1.75rem">Equipo Desarrollador</p>
     <h2 class="d2 rise d-1" style="max-width:15ch; margin-bottom:3.5rem">Tres integrantes, un prototipo.</h2>
     <div class="people rise">
       <div class="person p1"><div class="mono-disc">YM</div><h3>Yojan Alexander<br>Manosalva Peralta</h3><div class="role">Integrante</div></div>
@@ -805,21 +578,19 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   </div>
 </section>
 
-<!-- ══════════ CIERRE ══════════ -->
-<section class="close has-strip">
-  <div class="strip top" data-dir="-1" style="top:0" aria-hidden="true"></div>
-  <div class="strip bottom" data-dir="1" style="bottom:0" aria-hidden="true"></div>
+<!-- ══════════ CIERRE DEL PITCH ══════════ -->
+<section class="close">
   <div class="wrap">
     <p class="kicker rise" style="justify-content:center">The Next Crack</p>
     <h2 class="d2 rise d-1">Que la consulta vuelva a ser la consulta.</h2>
-    <p class="lead rise d-2" style="margin-inline:auto; text-align:center">DentisCraft no reemplaza al odontologo. Le saca de encima la parte que nunca debio hacer con las manos.</p>
-    <div class="hero-cta rise d-3"><a href="#dictado" class="btn btn-fill">Ver el dictado otra vez</a></div>
+    <p class="lead rise d-2" style="margin-inline:auto; text-align:center">DentisCraft no reemplaza al odontologo. Le devuelve su tiempo, su concentracion y su bioseguridad.</p>
+    <div class="hero-cta rise d-3"><a href="#dictado" class="btn btn-fill">Ver el dictado en accion</a></div>
   </div>
 </section>
 
 <footer>
   <div class="wrap foot">
-    <span>DentisCraft — Guia y Manual de Usuario</span>
+    <span>DentisCraft — Asistente Clinico de Voz</span>
     <span>Manosalva Peralta · Gavino Isidro · Aybar Escobar</span>
     <span>The Next Crack · 2026</span>
   </div>
@@ -878,7 +649,7 @@ const secIO=new IntersectionObserver(es=>{
     const h=$('#navMid a.here'); if(h && !navMid.matches(':hover')) moveNavPill(h);
   });
 },{rootMargin:'-45% 0px -50% 0px'});
-['que-es','asistente','voz','comandos','dictado','pdf','requisitos','equipo'].forEach(id=>{const el=document.getElementById(id); if(el) secIO.observe(el);});
+['proposito','pilares','dictado','asistente','comandos','equipo'].forEach(id=>{const el=document.getElementById(id); if(el) secIO.observe(el);});
 
 /* revelados */
 const rIO=new IntersectionObserver(es=>{
@@ -1036,7 +807,7 @@ segBtns.forEach(b=>b.addEventListener('pointerdown',()=>selectSeg(b)));
 addEventListener('load',()=>{ const on=$('#seg button.on'); if(on) selectSeg(on); });
 addEventListener('resize',()=>{ const on=$('#seg button.on'); if(on){ const r=on.getBoundingClientRect(),p=seg.getBoundingClientRect(); sx.to=sx.x=r.left-p.left; sw.to=sw.x=r.width; } });
 
-/* parallax de fotos de fondo */
+/* parallax fotos */
 const phHero=$('#phHero'), phRoom=$('#phRoom'), phEnamel=$('#phEnamel');
 const photos=[phHero,phRoom,phEnamel].filter(Boolean);
 let phY=0;
@@ -1133,31 +904,6 @@ function drawTooth(dt){
   }
 }
 
-/* carrusel */
-const tpl=$('#frames'), strips=$$('.strip');
-strips.forEach(st=>{
-  if(!tpl) return;
-  for(let k=0;k<3;k++) st.appendChild(tpl.content.cloneNode(true));
-  st._x = 0; st._w = 0;
-});
-function measureStrips(){ strips.forEach(st=>{ st._w = st.scrollWidth/3; }); }
-addEventListener('load',measureStrips); addEventListener('resize',measureStrips);
-
-let lastY=scrollY, vel=0;
-addEventListener('scroll',()=>{ vel += (scrollY-lastY); lastY=scrollY; },{passive:true});
-
-function moveStrips(dt){
-  vel=damp(vel,0,dt,3.4);
-  strips.forEach(st=>{
-    if(!st._w) return;
-    const dir=parseFloat(st.dataset.dir||1);
-    st._x -= dir*(reduce?0:16*dt) + dir*vel*0.32*dt*6;
-    if(st._x<=-st._w) st._x+=st._w;
-    if(st._x>0) st._x-=st._w;
-    st.style.transform=`translate3d(${st._x.toFixed(1)}px,0,0)`;
-  });
-}
-
 /* cursor spot */
 const spot=$('#spot'); let spX=innerWidth/2, spY=innerHeight/2, spXTo=spX, spYTo=spY;
 if(fine){
@@ -1193,7 +939,6 @@ function frame(now){
 
   movePhotos(dt);
   drawTooth(dt);
-  moveStrips(dt);
   if(spot){
     spX=damp(spX,spXTo,dt,5); spY=damp(spY,spYTo,dt,5);
     spot.style.transform=`translate3d(${spX.toFixed(1)}px,${spY.toFixed(1)}px,0)`;
