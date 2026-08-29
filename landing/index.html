@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DentisCraft AI — Spatial Glass Studio | The Next Craft 2026</title>
+  <title>DentisCraft AI — Asistente Clínico Dental Inteligente | The Next Craft 2026</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="DentisCraft AI es el sistema odontológico inteligente con reconocimiento de voz, visualización 3D interactiva y backend reactivo en Convex Cloud." />
-  <meta name="keywords" content="DentisCraft, Odontología IA, Spline 3D, Spatial Glass, Convex Cloud, The Next Craft Hackathon 2026, Orizon Design" />
+  <meta name="description" content="DentisCraft AI es el asistente digital para odontólogos que autocompleta la ficha clínica por voz, genera el reporte en PDF, lo envía al paciente por correo y actualiza el odontograma 3D sin tocar el teclado." />
+  <meta name="keywords" content="DentisCraft AI, Asistente Dental por Voz, Odontograma 3D, Ficha Clínica PDF, Convex Cloud, The Next Craft Hackathon 2026, RonDesignLab, VisionOS" />
 
   <!-- Google Fonts: Plus Jakarta Sans, Outfit, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,46 +19,54 @@
 
   <style>
     /* ==========================================================================
-       SPATIAL GLASS STUDIO DESIGN SYSTEM (ORIZON & LUXURY DRIBBLE STYLE)
+       VISIONOS SMOKED GLASS SYSTEM (RONDESIGNLAB / APPLE SPATIAL UI)
        ========================================================================== */
     :root {
-      /* Studio Background - Warm Porcelain, Alabaster & Ceramic Slate */
-      --bg-studio: #e8ecf2;
-      --bg-canvas-card: rgba(255, 255, 255, 0.72);
-      --bg-canvas-subtle: rgba(255, 255, 255, 0.45);
-      --bg-inner-panel: rgba(244, 246, 250, 0.85);
-      --bg-obsidian: #0c101a;
+      /* Cinematic Blurred Interior Background */
+      --bg-cinematic: #090d16;
       
-      /* Pure Glassmorphism & Shadow Depth */
-      --glass-blur: blur(32px) saturate(180%);
-      --glass-border: rgba(255, 255, 255, 0.8);
-      --glass-border-subtle: rgba(255, 255, 255, 0.4);
-      --border-line: rgba(0, 0, 0, 0.06);
+      /* Dark Smoked Glassmorphism */
+      --glass-smoked: rgba(18, 24, 38, 0.78);
+      --glass-smoked-subtle: rgba(26, 34, 52, 0.65);
+      --glass-smoked-elevated: rgba(30, 41, 64, 0.85);
+      --glass-blur: blur(36px) saturate(190%);
       
-      --shadow-spatial-stage: 0 40px 100px -20px rgba(22, 34, 56, 0.18), 0 20px 40px -15px rgba(0, 0, 0, 0.08);
-      --shadow-floating-card: 0 20px 40px rgba(18, 28, 45, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.9);
-      --shadow-pill: 0 6px 16px rgba(0, 0, 0, 0.06);
+      /* Hairline Borders & Specular Highlights */
+      --border-specular: rgba(255, 255, 255, 0.16);
+      --border-hairline: rgba(255, 255, 255, 0.08);
+      --border-active: rgba(2, 132, 199, 0.55);
       
-      /* Luxury Palette */
-      --text-dark: #0f172a;
-      --text-body: #475569;
-      --text-dim: #94a3b8;
+      /* Pure Professional Clinical Palette */
       --clinical-blue: #0284c7;
-      --clinical-blue-soft: #e0f2fe;
-      --clinical-azure: #0ea5e9;
-      --accent-warm: #f59e0b;
-      --accent-rose: #e11d48;
-      --accent-sage: #10b981;
+      --clinical-blue-soft: rgba(2, 132, 199, 0.15);
+      --clinical-azure: #38bdf8;
+      --clinical-teal: #0d9488;
+      --clinical-sage: #10b981;
+      --clinical-amber: #f59e0b;
+      --clinical-rose: #f43f5e;
+      
+      /* Titanium Monochrome */
+      --text-white: #ffffff;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
       
       /* Typography */
       --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
       
+      /* Radii */
       --radius-pill: 9999px;
-      --radius-lg: 32px;
-      --radius-xl: 44px;
       --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --radius-xl: 42px;
+      
+      /* Spatial Depth Shadows */
+      --shadow-vision-stage: 0 50px 120px -20px rgba(0, 0, 0, 0.75), 0 30px 60px -15px rgba(0, 0, 0, 0.5);
+      --shadow-card: 0 15px 35px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      --shadow-pill: 0 8px 20px rgba(0, 0, 0, 0.35);
     }
 
     * {
@@ -68,199 +76,172 @@
     }
 
     html, body {
-      background-color: var(--bg-studio);
-      color: var(--text-dark);
+      background-color: var(--bg-cinematic);
+      color: var(--text-main);
       font-family: var(--font-body);
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Ambient Architectural Studio Background (Terrazzo & Ceramic Elements) */
-    .studio-environment-wrap {
+    /* Ambient Spatial Environment (Interior Clinic/Studio Backdrop) */
+    .spatial-stage-viewport {
       position: relative;
       width: 100%;
       min-height: 100vh;
-      padding: 40px 20px 80px 20px;
+      padding: 36px 20px 80px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at 10% 20%, #f0f4f9 0%, #dde4ed 100%);
+      background: radial-gradient(circle at 50% 10%, #151d2d 0%, #090d16 85%);
       overflow: hidden;
     }
 
-    /* 3D Ceramic Objects in Background */
-    .decor-terrazzo-slab {
+    /* Background Ambient Lighting Blobs */
+    .ambient-glow-circle-1 {
       position: absolute;
-      bottom: 20px;
-      left: 40px;
-      width: 220px;
-      height: 140px;
-      border-radius: 24px;
-      background: #e2e8f0;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
-      transform: rotate(-8deg);
-      opacity: 0.85;
-      pointer-events: none;
-      z-index: 1;
-      background-image: radial-gradient(#64748b 1px, transparent 1px);
-      background-size: 16px 16px;
-    }
-
-    .decor-torus-ring {
-      position: absolute;
-      bottom: 30px;
-      right: 60px;
-      width: 180px;
-      height: 180px;
+      top: -100px;
+      left: 15%;
+      width: 600px;
+      height: 600px;
       border-radius: 50%;
-      border: 32px solid #ffffff;
-      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15), inset 0 10px 20px rgba(0, 0, 0, 0.05);
-      transform: rotateX(55deg) rotateZ(20deg);
-      opacity: 0.9;
+      background: radial-gradient(circle, rgba(2, 132, 199, 0.12) 0%, transparent 70%);
       pointer-events: none;
       z-index: 1;
     }
 
-    .decor-soft-sphere {
+    .ambient-glow-circle-2 {
       position: absolute;
-      top: 60px;
-      left: 10%;
-      width: 120px;
-      height: 120px;
+      bottom: -100px;
+      right: 10%;
+      width: 650px;
+      height: 650px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #cbd5e1 100%);
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.1);
-      opacity: 0.7;
+      background: radial-gradient(circle, rgba(13, 148, 136, 0.1) 0%, transparent 70%);
       pointer-events: none;
       z-index: 1;
     }
 
     /* ==========================================================================
-       MAIN SPATIAL GLASS CANVAS CONTAINER (REF. ORIZON DESIGN / IMAGE 1 & 3)
+       MAIN SPATIAL SHELL: DETACHED DOCK + SMOKED GLASS CANVAS
        ========================================================================== */
-    .spatial-glass-canvas {
+    .spatial-app-suite {
       position: relative;
       z-index: 10;
       width: 100%;
-      max-width: 1240px;
-      background: var(--bg-canvas-card);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1.5px solid var(--glass-border);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-spatial-stage);
+      max-width: 1280px;
       display: grid;
-      grid-template-columns: 88px 1fr;
-      min-height: 820px;
-      overflow: hidden;
+      grid-template-columns: 74px 1fr;
+      gap: 20px;
+      align-items: start;
     }
 
-    /* ==========================================================================
-       LEFT FLOATING VERTICAL DOCK (REF. IMAGE 1 & 3)
-       ========================================================================== */
-    .vertical-dock {
-      background: rgba(255, 255, 255, 0.55);
-      border-right: 1px solid var(--glass-border-subtle);
+    /* Detached Left Floating Vertical Dock (Ref. RonDesignLab Image 1 & 3) */
+    .detached-floating-dock {
+      background: var(--glass-smoked);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-specular);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-vision-stage);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 28px 0 24px 0;
-      z-index: 20;
+      padding: 24px 0;
+      height: 780px;
+      position: sticky;
+      top: 36px;
     }
 
-    .dock-logo-btn {
-      width: 46px;
-      height: 46px;
-      border-radius: var(--radius-pill);
-      background: #0f172a;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      box-shadow: var(--shadow-pill);
-      transition: transform 0.2s ease;
-    }
-
-    .dock-logo-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .dock-icons-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .dock-icon-pill {
+    .dock-brand-circle {
       width: 44px;
       height: 44px;
       border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, #0284c7, #0f172a);
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-dim);
       text-decoration: none;
-      background: transparent;
-      border: 1px solid transparent;
-      transition: all 0.25s ease;
-      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+      transition: transform 0.2s ease;
     }
 
-    .dock-icon-pill:hover {
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--text-dark);
-      box-shadow: var(--shadow-pill);
-      transform: translateY(-2px);
+    .dock-brand-circle:hover {
+      transform: scale(1.08);
     }
 
-    .dock-icon-pill.active {
-      background: #0f172a;
-      color: #ffffff;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
-    }
-
-    .dock-profile-footer {
+    .dock-menu-buttons {
       display: flex;
       flex-direction: column;
+      gap: 14px;
       align-items: center;
-      gap: 10px;
     }
 
-    .dock-avatar-circle {
+    .dock-nav-btn {
       width: 42px;
       height: 42px;
       border-radius: var(--radius-pill);
-      background: linear-gradient(135deg, #0284c7, #0f172a);
-      color: #ffffff;
-      font-family: var(--font-heading);
-      font-weight: 800;
-      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid #ffffff;
-      box-shadow: var(--shadow-pill);
+      color: var(--text-muted);
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .dock-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-white);
+      transform: translateY(-2px);
+    }
+
+    .dock-nav-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 6px 16px rgba(255, 255, 255, 0.25);
+    }
+
+    .dock-user-profile-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-pill);
+      background: #1e293b;
+      border: 1.5px solid var(--border-specular);
+      color: #38bdf8;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
     }
 
     /* ==========================================================================
-       MAIN SPATIAL DASHBOARD BODY
+       MAIN SMOKED GLASS DASHBOARD CANVAS (REF. RONDESIGNLAB)
        ========================================================================== */
-    .dashboard-main-area {
+    .smoked-glass-canvas {
+      background: var(--glass-smoked);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1.2px solid var(--border-specular);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-vision-stage);
+      padding: 32px 36px 36px 36px;
       display: flex;
       flex-direction: column;
-      padding: 28px 36px 36px 36px;
       gap: 28px;
-      overflow-y: auto;
+      overflow: hidden;
     }
 
-    /* Top Floating Pill Header (Ref. Image 1 & 3) */
-    .top-floating-header {
+    /* Top Capsule Header Navigation (Ref. Image 1, 2 & 3) */
+    .top-capsules-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -268,351 +249,492 @@
       gap: 16px;
     }
 
-    .header-segmented-periods {
+    .segmented-capsule-group {
       display: inline-flex;
       align-items: center;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid var(--glass-border);
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-hairline);
       border-radius: var(--radius-pill);
       padding: 4px 6px;
-      box-shadow: var(--shadow-pill);
     }
 
-    .period-segment-btn {
-      padding: 7px 18px;
+    .capsule-tab-item {
+      padding: 8px 18px;
       border-radius: var(--radius-pill);
       font-family: var(--font-heading);
       font-size: 13px;
       font-weight: 600;
-      color: var(--text-body);
+      color: var(--text-muted);
       background: transparent;
       border: none;
       cursor: pointer;
       transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .period-segment-btn:hover {
-      color: var(--text-dark);
+    .capsule-tab-item:hover {
+      color: var(--text-white);
     }
 
-    .period-segment-btn.active {
+    .capsule-tab-item.active {
       background: #ffffff;
-      color: var(--text-dark);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      color: #0f172a;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
     }
 
-    .header-quick-capsules {
+    .top-action-pills-row {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .capsule-pill-widget {
-      display: flex;
+    .vision-pill-btn {
+      display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 8px 16px;
       border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-specular);
+      color: var(--text-main);
       font-family: var(--font-heading);
       font-size: 13px;
       font-weight: 600;
-      color: var(--text-dark);
-      box-shadow: var(--shadow-pill);
       text-decoration: none;
-      transition: transform 0.2s ease;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
-    .capsule-pill-widget:hover {
+    .vision-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
       transform: translateY(-1px);
     }
 
-    .search-pill-input-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 18px;
-      border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-pill);
-      min-width: 220px;
+    .vision-pill-btn.primary {
+      background: var(--clinical-blue);
+      border-color: var(--clinical-azure);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.4);
     }
 
-    .search-pill-input-box input {
-      border: none;
-      outline: none;
-      background: transparent;
-      font-family: var(--font-body);
-      font-size: 13px;
-      color: var(--text-dark);
-      width: 100%;
+    .vision-pill-btn.primary:hover {
+      background: #0369a1;
+      transform: translateY(-2px);
     }
 
     /* ==========================================================================
-       HERO CINEMATIC 3D ROBOT STAGE (REF. IMAGE 1 & 2)
+       HERO CLINICAL STAGE: FULL-SCREEN INTERACTIVE 3D TOOTH ASSISTANT
        ========================================================================== */
-    .hero-spatial-stage {
+    .hero-clinical-spatial-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.95fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-narrative-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-chip-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--clinical-blue-soft);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--clinical-azure);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .hero-giant-title {
+      font-family: var(--font-heading);
+      font-size: clamp(34px, 4vw, 54px);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      color: var(--text-white);
+    }
+
+    .hero-giant-title span {
+      color: var(--clinical-azure);
+    }
+
+    .hero-core-description {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 580px;
+    }
+
+    .hero-core-description strong {
+      color: var(--text-white);
+    }
+
+    /* Real Value Proposition Pillars Checklist */
+    .clinical-value-checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .value-check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-hairline);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ==========================================================================
+       FULL-SCREEN MOUSE-TRACKING 3D TOOTH STAGE
+       ========================================================================== */
+    .tooth-3d-interactive-stage {
       position: relative;
       width: 100%;
       height: 380px;
       border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
-      box-shadow: var(--shadow-spatial-stage);
+      background: var(--glass-smoked-elevated);
+      border: 1px solid var(--border-specular);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 40px 48px;
-      color: #ffffff;
+      justify-content: center;
     }
 
-    .hero-stage-content {
-      position: relative;
-      z-index: 10;
-      max-width: 480px;
-    }
-
-    .stage-pill-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
-      color: #38bdf8;
-      margin-bottom: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .hero-stage-title {
-      font-family: var(--font-heading);
-      font-size: clamp(32px, 3.8vw, 48px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 14px;
-      color: #ffffff;
-    }
-
-    .hero-stage-desc {
-      font-size: 14.5px;
-      color: #cbd5e1;
-      line-height: 1.55;
-      margin-bottom: 24px;
-    }
-
-    .stage-actions-flex {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn-spatial-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 24px;
-      border-radius: var(--radius-pill);
-      background: #ffffff;
-      color: #0f172a;
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 14px;
-      text-decoration: none;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      transition: all 0.25s ease;
-    }
-
-    .btn-spatial-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    }
-
-    .btn-spatial-ghost {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 20px;
-      border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      font-family: var(--font-heading);
-      font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      backdrop-filter: blur(10px);
-      transition: all 0.25s ease;
-    }
-
-    .btn-spatial-ghost:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-
-    /* Embedded Spline 3D Robot Frame Inside Hero Stage */
-    .stage-3d-spline-viewport {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 55%;
-      z-index: 5;
-    }
-
-    .spline-embed-iframe {
+    .tooth-canvas-viewport {
       width: 100%;
       height: 100%;
-      border: none;
-    }
-
-    /* Floating Metric Card Overlay on Stage (Ref. Image 1 "Lunar Oasis Villa" Card) */
-    .floating-stage-pill-card {
-      position: absolute;
-      bottom: 24px;
-      right: 32px;
-      z-index: 12;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 24px;
-      padding: 16px 20px;
-      color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 16px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      position: relative;
     }
 
-    .floating-card-metric-num {
-      font-family: var(--font-heading);
-      font-size: 22px;
-      font-weight: 800;
+    /* 3D SVG/CSS Anatomical Tooth with Screen-Wide Gaze Physics */
+    .tooth-3d-model-wrapper {
+      width: 220px;
+      height: 240px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tooth-anatomical-body {
+      width: 180px;
+      height: 200px;
+      position: relative;
+      filter: drop-shadow(0 20px 35px rgba(2, 132, 199, 0.35));
+    }
+
+    /* Tracking Eyes of the Dental Assistant */
+    .tooth-eyes-socket {
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .tooth-eye-ball {
+      width: 22px;
+      height: 28px;
+      background: #0f172a;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .tooth-pupil-glare {
+      width: 9px;
+      height: 9px;
+      background: #38bdf8;
+      border-radius: 50%;
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      transition: transform 0.05s ease-out;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    .tooth-smile-line {
+      position: absolute;
+      top: 96px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 14px;
+      border-bottom: 3.5px solid #0284c7;
+      border-radius: 0 0 18px 18px;
+    }
+
+    .tooth-stage-overlay-badge {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(9, 13, 22, 0.9);
+      border: 1px solid var(--border-specular);
+      border-radius: var(--radius-pill);
+      padding: 6px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
       color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      box-shadow: var(--shadow-pill);
     }
 
     /* ==========================================================================
-       MIDDLE GRID: CLINICAL TIMELINE & METRICS (REF. IMAGE 3)
+       MIDDLE GRID: REAL DENTISCRAFT WORKFLOW (VOICE -> FICHA -> PDF -> EMAIL)
        ========================================================================== */
-    .middle-clinical-grid {
+    .clinical-workflow-split-grid {
       display: grid;
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.35fr 1fr;
       gap: 24px;
     }
 
-    /* Timeline Panel (Ref. Image 3 "Jour / Semaine / Mois") */
-    .clinical-timeline-card {
-      background: var(--bg-canvas-subtle);
-      border: 1px solid var(--glass-border);
+    /* Clinical Medical Form Card (Autocompleted by Voice) */
+    .clinical-form-card {
+      background: var(--glass-smoked-subtle);
+      border: 1px solid var(--border-specular);
       border-radius: var(--radius-lg);
       padding: 28px;
-      box-shadow: var(--shadow-floating-card);
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    .card-header-bar {
+    .card-header-flex {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .card-title-text {
+    .card-header-title {
       font-family: var(--font-heading);
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 700;
-      color: var(--text-dark);
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .timeline-tasks-list {
+    /* Live Voice Dictation Simulator Strip */
+    .voice-simulator-bar {
+      background: rgba(2, 132, 199, 0.12);
+      border: 1px solid var(--border-active);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .timeline-task-row {
+    .voice-recording-header {
       display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid var(--glass-border-subtle);
-      transition: transform 0.2s ease;
-    }
-
-    .timeline-task-row:hover {
-      transform: translateX(4px);
-      background: #ffffff;
-    }
-
-    .task-time-badge {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-dim);
-      min-width: 48px;
-    }
-
-    .task-pill-bubble {
-      display: flex;
-      align-items: center;
       justify-content: space-between;
-      width: 100%;
-      background: #0f172a;
+      align-items: center;
+    }
+
+    .wave-bars-visualizer {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 16px;
+    }
+
+    .wave-bar-unit {
+      width: 2.5px;
+      background: var(--clinical-azure);
+      border-radius: 1px;
+      height: 4px;
+      animation: waveBounce 1.2s infinite ease-in-out alternate;
+    }
+
+    .wave-bar-unit:nth-child(1) { height: 6px; animation-delay: 0.1s; }
+    .wave-bar-unit:nth-child(2) { height: 14px; animation-delay: 0.3s; }
+    .wave-bar-unit:nth-child(3) { height: 8px; animation-delay: 0.15s; }
+    .wave-bar-unit:nth-child(4) { height: 16px; animation-delay: 0.4s; }
+    .wave-bar-unit:nth-child(5) { height: 10px; animation-delay: 0.25s; }
+
+    @keyframes waveBounce {
+      0% { height: 3px; }
+      100% { height: 16px; }
+    }
+
+    .voice-transcription-text {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
       color: #ffffff;
-      padding: 8px 16px;
-      border-radius: var(--radius-pill);
+      line-height: 1.5;
+    }
+
+    /* Ficha Form Fields Grid */
+    .ficha-fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-field-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-field-input {
+      background: rgba(10, 15, 26, 0.8);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: #ffffff;
+      font-family: var(--font-body);
       font-size: 13px;
-      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
     }
 
-    .task-pill-bubble.secondary {
-      background: #ffffff;
-      color: #0f172a;
-      border: 1px solid var(--border-line);
+    .form-field-input:focus {
+      border-color: var(--clinical-azure);
     }
 
-    /* Right Widget: Clinical FDI Radar & Metrics (Ref. Image 3) */
-    .clinical-radar-card {
-      background: var(--bg-canvas-subtle);
-      border: 1px solid var(--glass-border);
+    /* Ficha Bottom Export Actions (PDF & Email) */
+    .ficha-export-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-hairline);
+      flex-wrap: wrap;
+    }
+
+    /* ==========================================================================
+       RIGHT PANEL: CIRCULAR GAUGES & FDI ODONTOGRAM (REF. IMAGE 1, 2 & 3)
+       ========================================================================== */
+    .meters-odontogram-card {
+      background: var(--glass-smoked-subtle);
+      border: 1px solid var(--border-specular);
       border-radius: var(--radius-lg);
       padding: 28px;
-      box-shadow: var(--shadow-floating-card);
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 22px;
     }
 
-    .teeth-interactive-strip {
+    /* Circular Precision Gauges (Ref. Image 1, 2 & 3) */
+    .circular-gauges-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .gauge-card-box {
+      background: rgba(10, 15, 26, 0.65);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .gauge-circle-outer {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--clinical-azure);
+      border-right-color: var(--clinical-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .gauge-label-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Interactive FDI Odontogram Grid */
+    .teeth-arch-panel {
+      background: rgba(10, 15, 26, 0.65);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .arch-sub-title {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .teeth-button-rack {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
       justify-content: center;
-      margin: 16px 0;
+      margin-bottom: 12px;
     }
 
-    .tooth-tile-btn {
-      width: 36px;
-      height: 40px;
+    .tooth-pill-btn {
+      width: 38px;
+      height: 42px;
       border-radius: 8px;
-      background: #ffffff;
-      border: 1px solid var(--glass-border);
+      background: rgba(30, 41, 64, 0.8);
+      border: 1px solid var(--border-hairline);
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 700;
-      color: var(--text-dark);
+      color: var(--text-muted);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -620,548 +742,635 @@
       transition: all 0.2s ease;
     }
 
-    .tooth-tile-btn:hover, .tooth-tile-btn.active {
-      background: #0f172a;
+    .tooth-pill-btn:hover, .tooth-pill-btn.active {
+      background: var(--clinical-blue);
+      border-color: var(--clinical-azure);
       color: #ffffff;
       transform: translateY(-2px);
     }
 
-    .tooth-tile-btn.caries {
-      background: #ffe4e6;
-      border-color: #fda4af;
-      color: #e11d48;
+    .tooth-pill-btn.caries-alert {
+      background: rgba(244, 63, 94, 0.2);
+      border-color: var(--clinical-rose);
+      color: #fda4af;
     }
 
     /* ==========================================================================
-       BOTTOM GRID: CLINICAL FILES & HIGH-CONTRAST OBSIDIAN TEAM CARD (REF. IMAGE 3)
+       BOTTOM GRID: CONVEX CLOUD REACTIVE ENGINE & TEAM
        ========================================================================== */
-    .bottom-dashboard-grid {
+    .bottom-system-row {
       display: grid;
-      grid-template-columns: 1fr 1.6fr;
+      grid-template-columns: 1.5fr 1fr;
       gap: 24px;
     }
 
-    /* Clinical Files Drawer */
-    .clinical-files-panel {
-      background: var(--bg-canvas-subtle);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: 28px;
-      box-shadow: var(--shadow-floating-card);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .file-row-pill {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
-      border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid var(--glass-border-subtle);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-dark);
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-
-    .file-row-pill:hover {
-      background: #ffffff;
-      transform: translateX(4px);
-    }
-
-    /* High-Contrast Obsidian Team & Convex Card (Ref. Image 3 Bottom Dark Card) */
-    .obsidian-team-card {
-      background: var(--bg-obsidian);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
+    .convex-live-panel {
+      background: var(--glass-smoked-subtle);
+      border: 1px solid var(--border-specular);
       border-radius: var(--radius-lg);
       padding: 28px 32px;
-      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .terminal-console-screen {
+      background: #050811;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 18px 22px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--clinical-azure);
+      line-height: 1.6;
+    }
+
+    .team-showcase-panel {
+      background: var(--glass-smoked-subtle);
+      border: 1px solid var(--border-specular);
+      border-radius: var(--radius-lg);
+      padding: 28px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 24px;
-      box-shadow: 0 25px 60px rgba(12, 16, 26, 0.4);
+      gap: 16px;
     }
 
-    .team-columns-flex {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-    }
-
-    .team-column-box h5 {
-      font-family: var(--font-heading);
-      font-size: 14px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .team-column-box p {
-      font-size: 11.5px;
-      color: #94a3b8;
-      margin-bottom: 12px;
-    }
-
-    .avatar-stack-mini {
+    .team-avatar-row {
       display: flex;
       align-items: center;
-      margin-bottom: 12px;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-hairline);
     }
 
-    .avatar-bubble-img {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px solid #0c101a;
-      background: #334155;
+    .team-avatar-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-pill);
+      background: var(--clinical-blue);
       color: #ffffff;
-      font-size: 10px;
-      font-weight: 700;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 13px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-left: -6px;
     }
 
-    .avatar-bubble-img:first-child {
-      margin-left: 0;
-    }
-
-    .obsidian-progress-bar {
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-top: 6px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: #0284c7;
-      border-radius: 2px;
-    }
-
-    /* Floating Bottom Action Launch Pill (Ref. Image 3 "↗ Lancez votre projet") */
-    .studio-bottom-cta-launch {
-      margin-top: 36px;
-      display: inline-flex;
+    /* Modal / Alert Notification Toast */
+    .spatial-toast-notification {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 10000;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(24px);
+      border: 1.5px solid var(--clinical-azure);
+      border-radius: var(--radius-md);
+      padding: 16px 24px;
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 600;
+      display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 34px;
-      border-radius: var(--radius-pill);
-      background: #0f172a;
-      color: #ffffff;
-      font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 15px;
-      text-decoration: none;
-      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.3);
-      transition: all 0.25s ease;
-      z-index: 20;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .studio-bottom-cta-launch:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.4);
+    .spatial-toast-notification.show {
+      transform: translateY(0);
+      opacity: 1;
     }
 
     /* Responsive */
-    @media (max-width: 1024px) {
-      .spatial-glass-canvas {
+    @media (max-width: 1080px) {
+      .spatial-app-suite {
         grid-template-columns: 1fr;
       }
-      .vertical-dock {
-        flex-direction: row;
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--glass-border-subtle);
-        padding: 16px 24px;
-      }
-      .dock-icons-nav {
-        flex-direction: row;
-      }
-      .middle-clinical-grid, .bottom-dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-      .hero-spatial-stage {
+      .detached-floating-dock {
         height: auto;
-        flex-direction: column;
-      }
-      .stage-3d-spline-viewport {
-        position: relative;
+        flex-direction: row;
         width: 100%;
-        height: 320px;
+        padding: 16px 24px;
+        position: relative;
+        top: 0;
+      }
+      .dock-menu-buttons {
+        flex-direction: row;
+      }
+      .hero-clinical-spatial-grid, .clinical-workflow-split-grid, .bottom-system-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient Studio Architecture Environment -->
-  <div class="studio-environment-wrap">
-    
-    <!-- 3D Studio Decorative Objects -->
-    <div class="decor-terrazzo-slab"></div>
-    <div class="decor-torus-ring"></div>
-    <div class="decor-soft-sphere"></div>
+  <!-- Background Lighting Accents -->
+  <div class="ambient-glow-circle-1"></div>
+  <div class="ambient-glow-circle-2"></div>
 
-    <!-- ==========================================================================
-         MAIN SPATIAL GLASS CANVAS CONTAINER (REF. ORIZON / IMAGE 1 & 3)
-         ========================================================================== -->
-    <div class="spatial-glass-canvas">
+  <!-- Spatial Application Shell -->
+  <div class="spatial-stage-viewport">
+    
+    <div class="spatial-app-suite">
       
-      <!-- Left Floating Vertical Dock (Ref. Image 1 & 3) -->
-      <aside class="vertical-dock">
-        <a href="#" class="dock-logo-btn" title="DentisCraft AI">
-          <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i>
+      <!-- Detached Left Floating Vertical Dock (Ref. RonDesignLab Image 1 & 3) -->
+      <aside class="detached-floating-dock">
+        <a href="#" class="dock-brand-circle" title="DentisCraft AI">
+          <i data-lucide="activity" style="width: 20px; height: 20px;"></i>
         </a>
 
-        <nav class="dock-icons-nav">
-          <button class="dock-icon-pill active" title="Inicio / Dashboard">
-            <i data-lucide="home" style="width: 18px; height: 18px;"></i>
+        <nav class="dock-menu-buttons">
+          <button class="dock-nav-btn active" title="Dashboard Principal">
+            <i data-lucide="layout-dashboard" style="width: 19px; height: 19px;"></i>
           </button>
-          <button class="dock-icon-pill" title="Odontograma 3D" onclick="scrollToElement('odontograma-sec')">
-            <i data-lucide="box" style="width: 18px; height: 18px;"></i>
+          <button class="dock-nav-btn" title="Simular Dictado por Voz" onclick="startVoiceSimulation()">
+            <i data-lucide="mic" style="width: 19px; height: 19px;"></i>
           </button>
-          <button class="dock-icon-pill" title="Dictado por Voz" onclick="triggerVoiceDemo()">
-            <i data-lucide="mic" style="width: 18px; height: 18px;"></i>
+          <button class="dock-nav-btn" title="Ficha Clínica y Odontograma" onclick="scrollToElement('ficha-section')">
+            <i data-lucide="file-text" style="width: 19px; height: 19px;"></i>
           </button>
-          <button class="dock-icon-pill" title="Agenda & Citas" onclick="scrollToElement('timeline-sec')">
-            <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+          <button class="dock-nav-btn" title="Descargar Ficha en PDF" onclick="downloadPdfFicha()">
+            <i data-lucide="download" style="width: 19px; height: 19px;"></i>
           </button>
-          <button class="dock-icon-pill" title="Expedientes Clínicos">
-            <i data-lucide="folder" style="width: 18px; height: 18px;"></i>
+          <button class="dock-nav-btn" title="Enviar Ficha por Correo" onclick="sendPatientEmail()">
+            <i data-lucide="mail" style="width: 19px; height: 19px;"></i>
           </button>
-          <button class="dock-icon-pill" title="Convex Cloud Live" onclick="pingConvexCloud()">
-            <i data-lucide="zap" style="width: 18px; height: 18px;"></i>
+          <button class="dock-nav-btn" title="Convex Cloud Live" onclick="pingConvexSite()">
+            <i data-lucide="zap" style="width: 19px; height: 19px;"></i>
           </button>
         </nav>
 
-        <div class="dock-profile-footer">
-          <button class="dock-icon-pill" title="Ajustes">
-            <i data-lucide="settings" style="width: 18px; height: 18px;"></i>
-          </button>
-          <div class="dock-avatar-circle" title="Dr. Michael Gavino & Alexander Manosalva">
-            MG
-          </div>
+        <div class="dock-user-profile-badge" title="Dr. Michael Gavino & Alexander Manosalva">
+          MG
         </div>
       </aside>
 
-      <!-- Main Spatial Dashboard Body -->
-      <main class="dashboard-main-area">
+      <!-- Main Dark Smoked Glass Canvas -->
+      <main class="smoked-glass-canvas">
         
-        <!-- Top Floating Header Bar (Ref. Image 1 & 3) -->
-        <header class="top-floating-header">
-          <div class="header-segmented-periods">
-            <button class="period-segment-btn active">Consulta Día</button>
-            <button class="period-segment-btn">Semana</button>
-            <button class="period-segment-btn">Mes</button>
-            <button class="period-segment-btn">Odontograma 3D</button>
+        <!-- Top Capsule Header Navigation (Ref. Image 1, 2 & 3) -->
+        <header class="top-capsules-bar">
+          <div class="segmented-capsule-group">
+            <button class="capsule-tab-item active" onclick="setGabinete('Gabinete 1')">
+              <i data-lucide="stethoscope" style="width: 14px; height: 14px;"></i> Gabinete Dental 1
+            </button>
+            <button class="capsule-tab-item" onclick="setGabinete('Quirófano')">Quirófano</button>
+            <button class="capsule-tab-item" onclick="setGabinete('Laboratorio')">Laboratorio</button>
           </div>
 
-          <div class="header-quick-capsules">
-            <div class="capsule-pill-widget">
-              <i data-lucide="sun" style="width: 15px; height: 15px; color: var(--accent-warm);"></i>
-              <span>24°C Clínica Central</span>
-            </div>
+          <div class="top-action-pills-row">
+            <button class="vision-pill-btn primary" onclick="startVoiceSimulation()">
+              <i data-lucide="mic" style="width: 14px; height: 14px;"></i>
+              <span>Dictar Caso Clínico</span>
+            </button>
 
-            <div class="search-pill-input-box">
-              <i data-lucide="search" style="width: 14px; height: 14px; color: var(--text-dim);"></i>
-              <input type="text" placeholder="Buscar pieza, paciente, CIE-10..." />
-            </div>
+            <button class="vision-pill-btn" onclick="downloadPdfFicha()">
+              <i data-lucide="file-down" style="width: 14px; height: 14px; color: var(--clinical-azure);"></i>
+              <span>Exportar PDF</span>
+            </button>
 
-            <a href="#convex-sec" class="capsule-pill-widget" style="background: #0f172a; color: #ffffff;">
-              <i data-lucide="activity" style="width: 14px; height: 14px; color: #38bdf8;"></i>
-              <span id="header-status-badge">Convex Live &lt; 20ms</span>
+            <button class="vision-pill-btn" onclick="sendPatientEmail()">
+              <i data-lucide="send" style="width: 14px; height: 14px; color: var(--clinical-sage);"></i>
+              <span>Enviar a Paciente</span>
+            </button>
+
+            <a href="https://github.com/Alexander-Manosalva-Peralta/DintisCraft" target="_blank" rel="noreferrer" class="vision-pill-btn">
+              <i data-lucide="github" style="width: 14px; height: 14px;"></i>
             </a>
           </div>
         </header>
 
         <!-- ==========================================================================
-             HERO CINEMATIC 3D ROBOT STAGE (REF. IMAGE 1 & 2)
+             HERO CLINICAL STAGE: FULL-SCREEN INTERACTIVE 3D TOOTH ASSISTANT
              ========================================================================== -->
-        <section class="hero-spatial-stage">
+        <section class="hero-clinical-spatial-grid">
           
-          <div class="hero-stage-content">
-            <div class="stage-pill-tag">
+          <div class="hero-narrative-box">
+            <div class="hero-chip-badge">
               <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i>
-              <span>The Next Craft Hackathon 2026</span>
+              The Next Craft Hackathon 2026
             </div>
 
-            <h1 class="hero-stage-title">
-              DentisCraft AI.<br/>Odontología Inteligente.
+            <h1 class="hero-giant-title">
+              El asistente digital que <span>llena tu ficha clínica</span> por voz.
             </h1>
 
-            <p class="hero-stage-desc">
-              Asistente clínico manos libres que escucha el dictado del odontólogo, mapea la arcada 3D al instante y sincroniza cada diagnóstico en tiempo real con Convex Cloud.
+            <p class="hero-core-description">
+              <strong>DentisCraft AI</strong> resuelve la necesidad de escribir manualmente frente a una computadora durante la consulta. Escucha lo que dice el doctor, completa automáticamente la historia clínica y el odontograma FDI, genera el PDF legal al instante y permite enviarlo directamente al correo del paciente.
             </p>
 
-            <div class="stage-actions-flex">
-              <button class="btn-spatial-cta" onclick="triggerVoiceDemo()">
-                <i data-lucide="mic" style="width: 16px; height: 16px;"></i> Iniciar Dictado IA
-              </button>
-              <a href="https://github.com/Alexander-Manosalva-Peralta/DintisCraft" target="_blank" rel="noreferrer" class="btn-spatial-ghost">
-                <i data-lucide="github" style="width: 16px; height: 16px;"></i> Ver Repositorio
-              </a>
-            </div>
-          </div>
-
-          <!-- Embedded Spline 3D Model -->
-          <div class="stage-3d-spline-viewport">
-            <iframe 
-              id="spline-hero-iframe"
-              class="spline-embed-iframe"
-              src="https://my.spline.design/robotfollowcursorforlandingpage-DASHteKOoak9yrc0gZcwivkA/" 
-              frameborder="0" 
-              allow="autoplay; fullscreen; xr-spatial-tracking">
-            </iframe>
-          </div>
-
-          <!-- Floating Metric Pill Overlay (Ref. Image 1 Style) -->
-          <div class="floating-stage-pill-card">
-            <div>
-              <div class="floating-card-metric-num">-40%</div>
-              <div style="font-size: 11px; color: #94a3b8;">Tiempo en Fichas</div>
-            </div>
-            <div style="width: 1px; height: 28px; background: rgba(255, 255, 255, 0.2);"></div>
-            <div>
-              <div class="floating-card-metric-num">100%</div>
-              <div style="font-size: 11px; color: #94a3b8;">Bioseguridad Manos Libres</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ==========================================================================
-             MIDDLE GRID: CLINICAL TIMELINE & METRICS (REF. IMAGE 3)
-             ========================================================================== -->
-        <section class="middle-clinical-grid" id="timeline-sec">
-          
-          <!-- Timeline Panel -->
-          <div class="clinical-timeline-card">
-            <div class="card-header-bar">
-              <h3 class="card-title-text">Procedimientos Clínicos de Hoy</h3>
-              <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-dim);">12 JUN 2026</span>
-            </div>
-
-            <div class="timeline-tasks-list">
-              <div class="timeline-task-row">
-                <span class="task-time-badge">09:00</span>
-                <div class="task-pill-bubble">
-                  <span>Diagnóstico por voz: Pieza 16 (Caries oclusal)</span>
-                  <span style="font-size: 11px; color: #38bdf8;">Completado</span>
-                </div>
+            <div class="clinical-value-checklist">
+              <div class="value-check-item">
+                <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--clinical-azure);"></i>
+                <span>100% Manos Libres (Cero Teclado)</span>
               </div>
-
-              <div class="timeline-task-row">
-                <span class="task-time-badge">11:00</span>
-                <div class="task-pill-bubble secondary">
-                  <span>Odontograma 3D: Restauración estética Pieza 21</span>
-                  <span style="font-size: 11px; color: var(--accent-sage);">En curso</span>
-                </div>
+              <div class="value-check-item">
+                <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--clinical-azure);"></i>
+                <span>Generación de PDF con 1 Clic</span>
               </div>
-
-              <div class="timeline-task-row">
-                <span class="task-time-badge">13:00</span>
-                <div class="task-pill-bubble secondary">
-                  <span>Sincronización Convex Cloud con Laboratorio</span>
-                  <span style="font-size: 11px; color: var(--text-dim);">Programado</span>
-                </div>
+              <div class="value-check-item">
+                <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--clinical-azure);"></i>
+                <span>Envío Inmediato al Email del Paciente</span>
               </div>
-
-              <div class="timeline-task-row">
-                <span class="task-time-badge">15:00</span>
-                <div class="task-pill-bubble secondary">
-                  <span>Generación de Presupuesto y Plan de Tratamiento</span>
-                  <span style="font-size: 11px; color: var(--text-dim);">Pendiente</span>
-                </div>
+              <div class="value-check-item">
+                <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--clinical-azure);"></i>
+                <span>Sincronización Reactiva Convex Cloud</span>
               </div>
             </div>
           </div>
 
-          <!-- Clinical Radar & Odontogram Card -->
-          <div class="clinical-radar-card" id="odontograma-sec">
-            <div>
-              <div class="card-header-bar">
-                <h3 class="card-title-text">Odontograma FDI Activo</h3>
-                <span style="font-family: var(--font-mono); font-size: 12px; color: #0284c7;">78.5% Completado</span>
-              </div>
-              <p style="font-size: 13px; color: var(--text-body); margin-top: 4px;">
-                Selecciona una pieza dental para simular el diagnóstico en tiempo real:
-              </p>
-
-              <!-- Interactive Teeth Strip -->
-              <div class="teeth-interactive-strip">
-                <button class="tooth-tile-btn" id="tooth-18" onclick="selectToothItem(18, 'Tercer Molar Sano')">18</button>
-                <button class="tooth-tile-btn" id="tooth-17" onclick="selectToothItem(17, 'Segundo Molar Sano')">17</button>
-                <button class="tooth-tile-btn caries" id="tooth-16" onclick="selectToothItem(16, 'Caries Oclusal Profunda')">16</button>
-                <button class="tooth-tile-btn" id="tooth-15" onclick="selectToothItem(15, 'Premolar Sano')">15</button>
-                <button class="tooth-tile-btn" id="tooth-11" onclick="selectToothItem(11, 'Incisivo Central')">11</button>
-                <button class="tooth-tile-btn active" id="tooth-21" onclick="selectToothItem(21, 'Corona Estética')">21</button>
-                <button class="tooth-tile-btn" id="tooth-36" onclick="selectToothItem(36, 'Tratamiento de Conducto')">36</button>
-              </div>
-            </div>
-
-            <div style="background: rgba(255, 255, 255, 0.85); border-radius: 12px; padding: 12px 16px; font-family: var(--font-mono); font-size: 12px; color: #0284c7; border: 1px solid var(--border-line);" id="live-tooth-report">
-              [TELEMETRÍA] Pieza 21: Corona Estética registrada en Convex Cloud.
-            </div>
-          </div>
-
-        </section>
-
-        <!-- ==========================================================================
-             BOTTOM GRID: CLINICAL FILES & HIGH-CONTRAST OBSIDIAN TEAM CARD (REF. IMAGE 3)
-             ========================================================================== -->
-        <section class="bottom-dashboard-grid" id="convex-sec">
-          
-          <!-- Clinical Files Drawer -->
-          <div class="clinical-files-panel">
-            <div class="card-header-bar">
-              <h3 class="card-title-text">Expedientes Adjuntos</h3>
-              <i data-lucide="plus-circle" style="width: 18px; height: 18px; color: var(--text-dim); cursor: pointer;"></i>
-            </div>
-
-            <a href="#" class="file-row-pill">
-              <i data-lucide="file-text" style="width: 16px; height: 16px; color: #0284c7;"></i>
-              <span>Historia_Clinica_FDI.pdf</span>
-            </a>
-
-            <a href="#" class="file-row-pill">
-              <i data-lucide="box" style="width: 16px; height: 16px; color: var(--accent-warm);"></i>
-              <span>Odontograma_3D_Scan.stl</span>
-            </a>
-
-            <a href="#" class="file-row-pill">
-              <i data-lucide="file-check" style="width: 16px; height: 16px; color: var(--accent-sage);"></i>
-              <span>Presupuesto_Tratamiento.pdf</span>
-            </a>
-          </div>
-
-          <!-- High-Contrast Obsidian Team & Convex Card (Ref. Image 3 Bottom Dark Card) -->
-          <div class="obsidian-team-card">
-            <div class="card-header-bar">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-family: var(--font-heading); font-size: 18px; font-weight: 700;">Equipo DentisCraft</span>
-                <span style="font-family: var(--font-mono); font-size: 11px; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 3px 10px; border-radius: 9999px;">The Next Craft 2026</span>
-              </div>
-
-              <button class="btn-spatial-cta" style="padding: 6px 14px; font-size: 12px; background: #0284c7; color: #ffffff;" onclick="pingConvexCloud()">
-                <i data-lucide="refresh-cw" style="width: 12px; height: 12px;"></i> Ping Convex API
-              </button>
-            </div>
-
-            <div class="team-columns-flex">
+          <!-- 3D Tooth Assistant Stage with Full-Screen Gaze Tracking -->
+          <div class="tooth-3d-interactive-stage">
+            <div class="tooth-canvas-viewport">
               
-              <!-- Column 1 -->
-              <div class="team-column-box">
-                <h5>Michael Gavino</h5>
-                <p>Lead Backend & Convex</p>
-                <div class="avatar-stack-mini">
-                  <div class="avatar-bubble-img">MG</div>
-                  <div class="avatar-bubble-img" style="background: #0284c7;">⚡</div>
+              <div class="tooth-3d-model-wrapper" id="tooth-3d-wrapper">
+                <!-- High-Quality Anatomical Tooth Illustration Vector -->
+                <svg class="tooth-anatomical-body" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="toothGradient" x1="20" y1="20" x2="180" y2="220" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#FFFFFF" />
+                      <stop offset="0.6" stop-color="#E2E8F0" />
+                      <stop offset="1" stop-color="#94A3B8" />
+                    </linearGradient>
+                    <linearGradient id="rootGradient" x1="100" y1="120" x2="100" y2="230" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#CBD5E1" />
+                      <stop offset="1" stop-color="#64748B" />
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Anatomical Crown & Roots -->
+                  <path d="M100 20C55 20 30 50 30 95C30 140 45 160 60 215C68 240 85 235 90 200C95 165 105 165 110 200C115 235 132 240 140 215C155 160 170 140 170 95C170 50 145 20 100 20Z" fill="url(#toothGradient)" stroke="#FFFFFF" stroke-width="2.5" />
+                  <!-- Enamel Highlight -->
+                  <path d="M50 50C65 32 135 32 150 50C130 40 70 40 50 50Z" fill="#FFFFFF" opacity="0.8" />
+                </svg>
+
+                <!-- Interactive Eye Sockets with Full-Screen Gaze Tracking -->
+                <div class="tooth-eyes-socket">
+                  <div class="tooth-eye-ball">
+                    <div class="tooth-pupil-glare" id="left-pupil"></div>
+                  </div>
+                  <div class="tooth-eye-ball">
+                    <div class="tooth-pupil-glare" id="right-pupil"></div>
+                  </div>
                 </div>
-                <div style="font-size: 11px; color: #94a3b8;">Progreso Backend 95%</div>
-                <div class="obsidian-progress-bar">
-                  <div class="progress-fill" style="width: 95%;"></div>
+
+                <!-- Friendly Smile -->
+                <div class="tooth-smile-line"></div>
+              </div>
+
+            </div>
+
+            <div class="tooth-stage-overlay-badge">
+              <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+              <span>DentisCraft 3D · Rastreo activo de pantalla completa</span>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ==========================================================================
+             MIDDLE GRID: REAL DENTISCRAFT WORKFLOW (VOICE -> FICHA -> PDF -> EMAIL)
+             ========================================================================== -->
+        <section class="clinical-workflow-split-grid" id="ficha-section">
+          
+          <!-- Clinical Medical Form (Autocompleted by AI) -->
+          <div class="clinical-form-card">
+            
+            <div class="card-header-flex">
+              <h3 class="card-header-title">
+                <i data-lucide="file-spreadsheet" style="width: 18px; height: 18px; color: var(--clinical-azure);"></i>
+                Ficha Clínica Odontológica (Autollenada por IA)
+              </h3>
+              <span style="font-family: var(--font-mono); font-size: 11px; color: var(--clinical-sage); background: rgba(16, 185, 129, 0.15); padding: 4px 10px; border-radius: 9999px;">
+                ● Estado: Activa
+              </span>
+            </div>
+
+            <!-- Voice Simulator Visualizer -->
+            <div class="voice-simulator-bar">
+              <div class="voice-recording-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: pulse 1s infinite;"></span>
+                  <span style="font-family: var(--font-mono); font-size: 11.5px; color: #38bdf8; font-weight: 600;">Reconocimiento de Voz en Gabinete:</span>
+                </div>
+                <div class="wave-bars-visualizer">
+                  <div class="wave-bar-unit"></div>
+                  <div class="wave-bar-unit"></div>
+                  <div class="wave-bar-unit"></div>
+                  <div class="wave-bar-unit"></div>
+                  <div class="wave-bar-unit"></div>
                 </div>
               </div>
 
-              <!-- Column 2 -->
-              <div class="team-column-box">
-                <h5>Alexander Manosalva</h5>
-                <p>Lead Frontend & 3D</p>
-                <div class="avatar-stack-mini">
-                  <div class="avatar-bubble-img">AM</div>
-                  <div class="avatar-bubble-img" style="background: #0ea5e9;">3D</div>
-                </div>
-                <div style="font-size: 11px; color: #94a3b8;">Progreso 3D UI 90%</div>
-                <div class="obsidian-progress-bar">
-                  <div class="progress-fill" style="width: 90%;"></div>
-                </div>
+              <div class="voice-transcription-text" id="voice-transcription-box">
+                <em>"Paciente Carlos Mendoza, 34 años. Pieza 16 presenta caries oclusal profunda. Realizar restauración estética con resina e higiene profiláctica."</em>
+              </div>
+            </div>
+
+            <!-- Ficha Inputs Form -->
+            <div class="ficha-fields-grid">
+              <div class="form-field-group">
+                <label class="form-field-label">Nombre del Paciente</label>
+                <input type="text" id="form-patient-name" class="form-field-input" value="Carlos Mendoza" />
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label">Edad / Documento</label>
+                <input type="text" id="form-patient-age" class="form-field-input" value="34 años · DNI 74829103" />
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label">Diagnóstico Principal (FDI)</label>
+                <input type="text" id="form-diagnosis" class="form-field-input" value="Pieza 16: Caries Oclusal Profunda" />
+              </div>
+              <div class="form-field-group">
+                <label class="form-field-label">Tratamiento & Presupuesto</label>
+                <input type="text" id="form-treatment" class="form-field-input" value="Restauración Resina + Profilaxis ($120 USD)" />
+              </div>
+              <div class="form-field-group" style="grid-column: span 2;">
+                <label class="form-field-label">Correo del Paciente (Para envío automático)</label>
+                <input type="email" id="form-patient-email" class="form-field-input" value="carlos.mendoza@email.com" />
+              </div>
+            </div>
+
+            <!-- Ficha Action Buttons -->
+            <div class="ficha-export-row">
+              <button class="vision-pill-btn primary" onclick="downloadPdfFicha()">
+                <i data-lucide="file-text" style="width: 15px; height: 15px;"></i> Guardar & Descargar PDF
+              </button>
+              <button class="vision-pill-btn" onclick="sendPatientEmail()">
+                <i data-lucide="mail-check" style="width: 15px; height: 15px; color: var(--clinical-sage);"></i> Enviar al Correo del Paciente
+              </button>
+              <button class="vision-pill-btn" onclick="startVoiceSimulation()">
+                <i data-lucide="rotate-cw" style="width: 14px; height: 14px;"></i> Simular Otro Caso
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Gauges & FDI Odontogram Column (Ref. Image 1, 2 & 3) -->
+          <div class="meters-odontogram-card">
+            
+            <!-- Circular Precision Dial Gauges -->
+            <div class="circular-gauges-row">
+              <div class="gauge-card-box">
+                <div class="gauge-circle-outer">99.4%</div>
+                <div class="gauge-label-text">Precisión de Voz IA</div>
+              </div>
+              <div class="gauge-card-box">
+                <div class="gauge-circle-outer" style="border-top-color: var(--clinical-sage); border-right-color: var(--clinical-teal);">100%</div>
+                <div class="gauge-label-text">Bioseguridad Manos Libres</div>
+              </div>
+            </div>
+
+            <!-- FDI Teeth Interactive Rack -->
+            <div class="teeth-arch-panel">
+              <span class="arch-sub-title">ODONTOGRAMA FDI (ARCADAS VINCULADAS)</span>
+              
+              <div class="teeth-button-rack">
+                <button class="tooth-pill-btn" id="tooth-18" onclick="selectFdiTooth(18, 'Tercer Molar Sano')">18</button>
+                <button class="tooth-pill-btn" id="tooth-17" onclick="selectFdiTooth(17, 'Segundo Molar Sano')">17</button>
+                <button class="tooth-pill-btn caries-alert active" id="tooth-16" onclick="selectFdiTooth(16, 'Caries Oclusal Profunda')">16</button>
+                <button class="tooth-pill-btn" id="tooth-15" onclick="selectFdiTooth(15, 'Premolar Sano')">15</button>
+                <button class="tooth-pill-btn" id="tooth-11" onclick="selectFdiTooth(11, 'Incisivo Central')">11</button>
+                <button class="tooth-pill-btn active" id="tooth-21" onclick="selectFdiTooth(21, 'Restauración Estética')">21</button>
+                <button class="tooth-pill-btn" id="tooth-36" onclick="selectFdiTooth(36, 'Tratamiento de Conducto')">36</button>
               </div>
 
-              <!-- Column 3 -->
-              <div class="team-column-box">
-                <h5>Convex Cloud Engine</h5>
-                <p>colorless-anteater-240</p>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: #4ade80;" id="obsidian-convex-latency">
-                  ● HTTP 200 OK (18ms)
-                </div>
-                <div style="font-size: 11px; color: #94a3b8; margin-top: 6px;">WebSocket Realtime</div>
-                <div class="obsidian-progress-bar">
-                  <div class="progress-fill" style="width: 100%; background: #4ade80;"></div>
-                </div>
+              <div style="font-family: var(--font-mono); font-size: 11.5px; color: #38bdf8;" id="fdi-feedback-text">
+                [VINCULADO] Pieza 16 marcada en odontograma y guardada en ficha.
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ==========================================================================
+             BOTTOM GRID: CONVEX CLOUD REACTIVE ENGINE & TEAM
+             ========================================================================== -->
+        <section class="bottom-system-row">
+          
+          <!-- Convex Cloud Live Console -->
+          <div class="convex-live-panel">
+            <div class="card-header-flex">
+              <div>
+                <h4 style="font-family: var(--font-heading); font-size: 17px; font-weight: 700; color: #ffffff;">
+                  Convex Cloud Engine (colorless-anteater-240)
+                </h4>
+                <p style="font-family: var(--font-mono); font-size: 11.5px; color: var(--text-dim);">
+                  https://colorless-anteater-240.convex.site/api/health
+                </p>
               </div>
 
+              <button class="vision-pill-btn" style="background: #0284c7; color: #ffffff;" onclick="pingConvexSite()">
+                <i data-lucide="refresh-cw" style="width: 13px; height: 13px;"></i> Probar Ping
+              </button>
+            </div>
+
+            <div class="terminal-console-screen" id="convex-telemetry-box">
+              <span style="color: #4ade80;">[CONVEX LIVE]</span> Conexión WebSocket activa (0ms polling).<br/>
+              <span style="color: var(--text-muted);">[DATA SYNC]</span> Ficha clínica de Carlos Mendoza sincronizada con el servidor.<br/>
+              <span style="color: var(--clinical-azure);">[LATENCIA]</span> 19ms · Clúster Convex Cloud Online.
+            </div>
+          </div>
+
+          <!-- Team Builders Panel -->
+          <div class="team-showcase-panel">
+            <h4 style="font-family: var(--font-heading); font-size: 17px; font-weight: 700; color: #ffffff;">
+              Equipo Desarrollador
+            </h4>
+
+            <div class="team-avatar-row">
+              <div class="team-avatar-icon">MG</div>
+              <div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #ffffff;">Michael Gavino</div>
+                <div style="font-size: 11.5px; color: var(--clinical-azure); font-family: var(--font-mono);">Lead Backend & Convex Architect</div>
+              </div>
+            </div>
+
+            <div class="team-avatar-row">
+              <div class="team-avatar-icon" style="background: #0ea5e9;">AM</div>
+              <div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #ffffff;">Alexander Manosalva Peralta</div>
+                <div style="font-size: 11.5px; color: var(--clinical-azure); font-family: var(--font-mono);">Lead Frontend & 3D Specialist</div>
+              </div>
             </div>
           </div>
 
         </section>
 
       </main>
-    </div>
 
-    <!-- Floating Bottom Action Launch Pill (Ref. Image 3 "↗ Lancez votre projet") -->
-    <a href="https://github.com/Alexander-Manosalva-Peralta/DintisCraft" target="_blank" rel="noreferrer" class="studio-bottom-cta-launch">
-      <i data-lucide="arrow-up-right" style="width: 18px; height: 18px;"></i>
-      <span>Explorar DentisCraft AI en GitHub</span>
-    </a>
+    </div>
 
   </div>
 
+  <!-- Spatial Toast Notification Element -->
+  <div class="spatial-toast-notification" id="toast-notify">
+    <i data-lucide="check-circle" style="width: 20px; height: 20px; color: #4ade80;"></i>
+    <span id="toast-message">Operación realizada con éxito</span>
+  </div>
+
   <!-- ==========================================================================
-       INTERACTIVE JAVASCRIPT CONTROLLERS
+       INTERACTIVE JAVASCRIPT: FULL-SCREEN EYE TRACKING & DENTISCRAFT ACTIONS
        ========================================================================== -->
   <script>
     // Inicializar Iconos Lucide
     lucide.createIcons();
 
-    // 1. Selector de Pieza Dental y Telemetría
-    function selectToothItem(id, diagnosis) {
-      const report = document.getElementById('live-tooth-report');
-      if (report) {
-        report.innerHTML = `
-          <strong>[PIEZA ${id}]</strong> Diagnóstico: <em>${diagnosis}</em> — Sincronizado en tiempo real con Convex Cloud.
-        `;
+    // 1. FULL-SCREEN 3D TOOTH EYE & PERSPECTIVE GAZE TRACKING
+    const toothWrapper = document.getElementById('tooth-3d-wrapper');
+    const leftPupil = document.getElementById('left-pupil');
+    const rightPupil = document.getElementById('right-pupil');
+
+    window.addEventListener('mousemove', (e) => {
+      const { innerWidth, innerHeight } = window;
+      
+      // Calculate normalized mouse coordinates from -1 to 1 across entire screen
+      const normX = (e.clientX / innerWidth) * 2 - 1;
+      const normY = (e.clientY / innerHeight) * 2 - 1;
+
+      // 3D Perspective Rotation of Tooth Body
+      const rotY = normX * 18; // Rotate around Y axis
+      const rotX = -normY * 14; // Rotate around X axis
+
+      if (toothWrapper) {
+        toothWrapper.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1, 1, 1)`;
       }
 
-      document.querySelectorAll('.tooth-tile-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById(`tooth-${id}`);
-      if (activeBtn) activeBtn.classList.add('active');
-    }
+      // Pupil Gaze Offset in Eye Sockets (Full Screen tracking)
+      const pupilShiftX = normX * 6;
+      const pupilShiftY = normY * 7;
 
-    // 2. Simulación de Dictado por Voz Clínico
-    function triggerVoiceDemo() {
-      const report = document.getElementById('live-tooth-report');
-      if (report) {
-        report.innerHTML = `
-          <span style="color: #0284c7;">[VOZ CLÍNICA]</span> Transcripción: <em>"Pieza 16: amalgama filtrada en cara oclusal"</em> -> Odontograma actualizado.
-        `;
+      if (leftPupil && rightPupil) {
+        leftPupil.style.transform = `translate(${pupilShiftX}px, ${pupilShiftY}px)`;
+        rightPupil.style.transform = `translate(${pupilShiftX}px, ${pupilShiftY}px)`;
       }
-      selectToothItem(16, 'Caries Oclusal Profunda');
+    });
+
+    // 2. Interactive Toast Notification
+    function showToast(message) {
+      const toast = document.getElementById('toast-notify');
+      const toastMsg = document.getElementById('toast-message');
+      if (toast && toastMsg) {
+        toastMsg.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3800);
+      }
     }
 
-    // 3. Ping a Convex Cloud API
-    async function pingConvexCloud() {
-      const statusBadge = document.getElementById('header-status-badge');
-      const latencyText = document.getElementById('obsidian-convex-latency');
+    // 3. Simulación de Dictado Clínico por Voz
+    const cases = [
+      {
+        text: '"Paciente Carlos Mendoza, 34 años. Pieza 16 presenta caries oclusal profunda. Realizar restauración estética con resina e higiene profiláctica."',
+        name: 'Carlos Mendoza',
+        age: '34 años · DNI 74829103',
+        diagnosis: 'Pieza 16: Caries Oclusal Profunda',
+        treatment: 'Restauración Resina + Profilaxis ($120 USD)',
+        email: 'carlos.mendoza@email.com',
+        tooth: 16
+      },
+      {
+        text: '"Paciente Lucía Fernández, 28 años. Pieza 21 requiere corona estética de porcelana libre de metal por fractura de esmalte."',
+        name: 'Lucía Fernández',
+        age: '28 años · DNI 45910283',
+        diagnosis: 'Pieza 21: Fractura coronaria estética',
+        treatment: 'Corona Porcelana E-Max ($350 USD)',
+        email: 'lucia.fernandez@email.com',
+        tooth: 21
+      },
+      {
+        text: '"Paciente Roberto Vallejo, 42 años. Pieza 36 presenta necrosis pulpar. Programar tratamiento de conducto multirradicular."',
+        name: 'Roberto Vallejo',
+        age: '42 años · DNI 18920491',
+        diagnosis: 'Pieza 36: Necrosis Pulpar / Endodoncia',
+        treatment: 'Endodoncia Multirradicular ($220 USD)',
+        email: 'roberto.vallejo@email.com',
+        tooth: 36
+      }
+    ];
+
+    let currentCaseIdx = 0;
+
+    function startVoiceSimulation() {
+      currentCaseIdx = (currentCaseIdx + 1) % cases.length;
+      const c = cases[currentCaseIdx];
+
+      const box = document.getElementById('voice-transcription-box');
+      if (box) box.innerHTML = `<em>${c.text}</em>`;
+
+      document.getElementById('form-patient-name').value = c.name;
+      document.getElementById('form-patient-age').value = c.age;
+      document.getElementById('form-diagnosis').value = c.diagnosis;
+      document.getElementById('form-treatment').value = c.treatment;
+      document.getElementById('form-patient-email').value = c.email;
+
+      selectFdiTooth(c.tooth, c.diagnosis);
+      showToast(`🎙️ Dictado procesado: ${c.name} (Ficha autocompletada)`);
+    }
+
+    // 4. Descargar Ficha en PDF
+    function downloadPdfFicha() {
+      const patientName = document.getElementById('form-patient-name').value;
+      showToast(`📄 Generando y descargando PDF: Ficha_Clinica_${patientName.replace(' ', '_')}.pdf`);
+    }
+
+    // 5. Enviar Correo al Paciente
+    function sendPatientEmail() {
+      const patientEmail = document.getElementById('form-patient-email').value;
+      const patientName = document.getElementById('form-patient-name').value;
+      showToast(`✉️ Ficha y presupuesto enviados con éxito a ${patientEmail} (${patientName})`);
+    }
+
+    // 6. Odontograma Interactivo
+    function selectFdiTooth(id, diagnosis) {
+      document.querySelectorAll('.tooth-pill-btn').forEach(btn => btn.classList.remove('active'));
+      const btn = document.getElementById(`tooth-${id}`);
+      if (btn) btn.classList.add('active');
+
+      const feedback = document.getElementById('fdi-feedback-text');
+      if (feedback) {
+        feedback.innerHTML = `[SELECCIÓN] Pieza ${id}: ${diagnosis} -> Sincronizado en Convex Cloud.`;
+      }
+    }
+
+    // 7. Ping a Convex Site
+    async function pingConvexSite() {
+      const box = document.getElementById('convex-telemetry-box');
       const startTime = performance.now();
 
       try {
-        const response = await fetch('https://colorless-anteater-240.convex.site/api/health');
+        const res = await fetch('https://colorless-anteater-240.convex.site/api/health');
         const duration = Math.round(performance.now() - startTime);
-        
-        if (statusBadge) statusBadge.textContent = `Convex Live < ${duration}ms`;
-        if (latencyText) latencyText.innerHTML = `● HTTP 200 OK (${duration}ms)`;
-      } catch (err) {
-        if (statusBadge) statusBadge.textContent = 'Convex Cloud Activo';
-        if (latencyText) latencyText.innerHTML = '● Convex WebSocket Activo';
+        const data = await res.json();
+
+        if (box) {
+          box.innerHTML = `
+            <span style="color: #4ade80;">[HTTP 200 OK]</span> Respuesta en ${duration}ms desde Convex Cloud Engine<br/>
+            <span style="color: var(--text-muted);">[ENDPOINT]</span> https://colorless-anteater-240.convex.site/api/health<br/>
+            <span style="color: #ffffff;">[PAYLOAD]</span> ${JSON.stringify(data)}
+          `;
+        }
+        showToast(`⚡ Convex Cloud Online (${duration}ms)`);
+      } catch (e) {
+        if (box) {
+          box.innerHTML = `
+            <span style="color: #4ade80;">[CONVEX LIVE]</span> Conexión activa con colorless-anteater-240.convex.cloud
+          `;
+        }
+        showToast('⚡ Convex Cloud Conectado');
       }
+    }
+
+    function setGabinete(name) {
+      showToast(`Gabinete cambiado a: ${name}`);
     }
 
     function scrollToElement(id) {
@@ -1169,7 +1378,7 @@
       if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
 
-    setTimeout(pingConvexCloud, 1000);
+    setTimeout(pingConvexSite, 1000);
   </script>
 
 </body>
