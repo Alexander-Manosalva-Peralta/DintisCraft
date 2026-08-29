@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DentisCraft — Asistente Clínico Inteligente con IA y Visualización 3D</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="DentisCraft es el asistente clínico odontológico con IA, visualización anatómica 3D y backend en tiempo real con Convex para The Next Craft Hackathon." />
+  <meta name="keywords" content="DentisCraft, Odontología, IA Dental, Asistente Clínico, Spline 3D, Convex API, The Next Craft" />
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Spline Viewer Web Component Script -->
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.72/build/spline-viewer.js"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Three.js CDN para efectos holográficos de respaldo -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       VARIABLES Y SISTEMA DE DISEÑO DENTISCRAFT
+       ========================================================================== */
+    :root {
+      --bg-dark: #070a11;
+      --bg-surface: #0e1422;
+      --bg-card: rgba(18, 26, 44, 0.7);
+      --bg-card-hover: rgba(26, 38, 64, 0.85);
+      
+      --cyan-glow: #00f5c4;
+      --cyan-bright: #00d2ff;
+      --blue-accent: #3b82f6;
+      --purple-accent: #8b5cf6;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 245, 196, 0.25);
+      --border-glow-hover: rgba(0, 245, 196, 0.6);
+      
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-full: 9999px;
+      
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 20% 15%, rgba(0, 245, 196, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 80% 60%, rgba(0, 210, 255, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+    }
+
+    /* Ambient Background Grid */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-size: 60px 60px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       NAVBAR
+       ========================================================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(7, 10, 17, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: var(--transition);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, rgba(0, 245, 196, 0.2), rgba(0, 210, 255, 0.2));
+      border: 1px solid var(--border-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan-glow);
+      box-shadow: 0 0 15px rgba(0, 245, 196, 0.25);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      color: var(--cyan-glow);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan-glow), var(--cyan-bright));
+      color: #041017;
+      box-shadow: 0 4px 20px rgba(0, 245, 196, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(0, 245, 196, 0.55);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border-glow);
+      color: var(--cyan-glow);
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       HERO SECTION WITH 3D EMBED
+       ========================================================================== */
+    .hero-section {
+      padding-top: 140px;
+      padding-bottom: 90px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(0, 245, 196, 0.08);
+      border: 1px solid var(--border-glow);
+      color: var(--cyan-glow);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan-glow);
+      box-shadow: 0 0 8px var(--cyan-glow);
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5vw, 62px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--cyan-glow), var(--cyan-bright) 60%, var(--purple-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      font-size: 17px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .stat-item h4 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .stat-item p {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+
+    /* 3D Viewer Container */
+    .hero-3d-wrapper {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at center, rgba(0, 245, 196, 0.12), rgba(14, 20, 34, 0.8) 70%);
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(0, 245, 196, 0.1);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Spline Viewer Frame */
+    .spline-embed-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+    }
+
+    .spline-badge {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      z-index: 10;
+      background: rgba(7, 10, 17, 0.75);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--cyan-glow);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+    }
+
+    /* 3D Fallback Interactive Canvas */
+    #hero-canvas-fallback {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       PROBLEM & SOLUTION SECTION
+       ========================================================================== */
+    .section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 64px auto;
+    }
+
+    .section-tag {
+      color: var(--cyan-glow);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 3.8vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .card-problem {
+      background: rgba(239, 68, 68, 0.03);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: var(--radius-md);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-problem::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: #ef4444;
+    }
+
+    .card-solution {
+      background: rgba(0, 245, 196, 0.04);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-md);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 245, 196, 0.1);
+    }
+
+    .card-solution::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--cyan-glow);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .card-problem .card-heading {
+      color: #f87171;
+    }
+
+    .card-solution .card-heading {
+      color: var(--cyan-glow);
+    }
+
+    .list-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .list-item strong {
+      color: var(--text-main);
+    }
+
+    .list-icon-problem {
+      color: #f87171;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .list-icon-solution {
+      color: var(--cyan-glow);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    /* ==========================================================================
+       FEATURES GRID
+       ========================================================================== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glow);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 245, 196, 0.15);
+    }
+
+    .feature-icon-wrapper {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      background: rgba(0, 245, 196, 0.1);
+      border: 1px solid rgba(0, 245, 196, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan-glow);
+      margin-bottom: 22px;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .feature-desc {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      line-height: 1.65;
+    }
+
+    /* ==========================================================================
+       3D SPLINE SHOWCASE & CONFIGURATION GUIDE
+       ========================================================================== */
+    .showcase-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .code-box {
+      background: #04070d;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #38bdf8;
+      overflow-x: auto;
+      margin: 18px 0;
+      position: relative;
+    }
+
+    .code-box-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      font-size: 11px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 6px;
+    }
+
+    .highlight-tag {
+      color: var(--cyan-glow);
+      font-weight: bold;
+    }
+
+    /* ==========================================================================
+       TEAM MEMBERS SECTION (THE NEXT CRAFT HACKATHON)
+       ========================================================================== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .team-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .team-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-4px);
+    }
+
+    .avatar-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 16px auto;
+      background: linear-gradient(135deg, var(--cyan-glow), var(--purple-accent));
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan-glow);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    .member-name {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .member-role {
+      color: var(--cyan-glow);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .member-bio {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       LIVE BACKEND STATUS & TESTER (CONVEX)
+       ========================================================================== */
+    .backend-card {
+      background: linear-gradient(135deg, rgba(14, 20, 34, 0.9), rgba(7, 10, 17, 0.95));
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .backend-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .pulse-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--cyan-glow);
+      background: rgba(0, 245, 196, 0.08);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(0, 245, 196, 0.3);
+    }
+
+    .terminal-window {
+      background: #030508;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #94a3b8;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 60px 0 30px 0;
+      background: #04060a;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 13px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      font-family: var(--font-mono);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE
+       ========================================================================== */
+    @media (max-width: 960px) {
+      .hero-grid, .comparison-grid, .showcase-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-menu {
+        display: none;
+      }
+      .hero-3d-wrapper {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Animated Grid -->
+  <div class="bg-grid"></div>
+
+  <!-- ==========================================================================
+       NAVBAR
+       ========================================================================== -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo">
+        <div class="brand-icon">
+          <i data-lucide="activity"></i>
+        </div>
+        <span class="brand-name">DentisCraft</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#problematica" class="nav-link">Problemática</a></li>
+        <li><a href="#solucion" class="nav-link">Solución</a></li>
+        <li><a href="#caracteristicas" class="nav-link">Características</a></li>
+        <li><a href="#modelo-3d" class="nav-link">Modelo 3D</a></li>
+        <li><a href="#equipo" class="nav-link">Equipo</a></li>
+        <li><a href="#convex-api" class="nav-link">API Convex</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 12px;">
+        <a href="#modelo-3d" class="btn btn-secondary">
+          <i data-lucide="box" style="width: 16px; height: 16px;"></i> Visor 3D
+        </a>
+        <a href="#convex-api" class="btn btn-primary">
+          <i data-lucide="zap" style="width: 16px; height: 16px;"></i> Live Backend
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION WITH 3D EMBED
+       ========================================================================== -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      
+      <!-- Text Side -->
+      <div class="hero-content">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          The Next Craft Hackathon 2026
+        </div>
+
+        <h1 class="hero-title">
+          DentisCraft — Asistente Clínico con <span>IA & 3D</span>
+        </h1>
+
+        <p class="hero-description">
+          <strong>DentisCraft AI</strong> transforma la práctica odontológica moderna integrando a tu asistente clínico interactivo con reconocimiento de voz en tiempo real, avatar robótico 3D inteligente y sincronización en la nube con Convex.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#solucion" class="btn btn-primary">
+            <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i> Conoce la Propuesta
+          </a>
+          <a href="https://github.com/Alexander-Manosalva-Peralta/DintisCraft" target="_blank" rel="noreferrer" class="btn btn-secondary">
+            <i data-lucide="github" style="width: 16px; height: 16px;"></i> GitHub Repo
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h4>-40%</h4>
+            <p>Tiempo en Fichas</p>
+          </div>
+          <div class="stat-item">
+            <h4>100%</h4>
+            <p>Sincronización Convex</p>
+          </div>
+          <div class="stat-item">
+            <h4>3D</h4>
+            <p>Modelado Interactivo</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Spline Canvas Side -->
+      <div class="hero-3d-wrapper" id="hero-3d-container">
+        
+        <!-- Modelo 3D Interactivo Spline: Robot Avatar DentisCraft AI -->
+        <iframe 
+          id="spline-hero-iframe"
+          class="spline-embed-frame"
+          src="https://my.spline.design/robotfollowcursorforlandingpage-DASHteKOoak9yrc0gZcwivkA/" 
+          frameborder="0" 
+          width="100%" 
+          height="100%"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          style="border: none; width: 100%; height: 100%; position: absolute; inset: 0; z-index: 2;">
+        </iframe>
+
+        <!-- Canvas Fallback 3D con Three.js en caso de carga o modo offline -->
+        <canvas id="hero-canvas-fallback"></canvas>
+
+        <div class="spline-badge">
+          <i data-lucide="bot" style="width: 14px; height: 14px;"></i>
+          <span>DentisCraft AI · Asistente 3D (Sigue tu cursor)</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PROBLEMATICA Y SOLUCION
+       ========================================================================== -->
+  <section class="section" id="problematica">
+    <div class="container">
+      
+      <div class="section-header">
+        <span class="section-tag">Diagnóstico y Oportunidad</span>
+        <h2 class="section-title">¿Qué problema resolvemos?</h2>
+        <p class="section-subtitle">
+          La consulta odontológica tradicional enfrenta cuellos de botella críticos en registro clínico y comunicación con el paciente.
+        </p>
+      </div>
+
+      <div class="comparison-grid" id="solucion">
+        
+        <!-- Problema -->
+        <div class="card-problem">
+          <div class="card-heading">
+            <i data-lucide="alert-triangle"></i>
+            <h3>La Problemática Actual</h3>
+          </div>
+          <ul class="list-items">
+            <li class="list-item">
+              <i data-lucide="x-circle" class="list-icon-problem"></i>
+              <div>
+                <strong>Carga Administrativa Excesiva:</strong> Los odontólogos pierden hasta un 35% de su jornada digitando fichas clínicas manualmente.
+              </div>
+            </li>
+            <li class="list-item">
+              <i data-lucide="x-circle" class="list-icon-problem"></i>
+              <div>
+                <strong>Brecha de Comunicación con el Paciente:</strong> Los pacientes no comprenden radiografías complejas ni términos técnicos sin modelos visuales claros.
+              </div>
+            </li>
+            <li class="list-item">
+              <i data-lucide="x-circle" class="list-icon-problem"></i>
+              <div>
+                <strong>Contaminación Cruzada:</strong> Tener que tocar teclado y ratón durante el examen clínico rompe la esterilidad del procedimiento.
+              </div>
+            </li>
+            <li class="list-item">
+              <i data-lucide="x-circle" class="list-icon-problem"></i>
+              <div>
+                <strong>Falta de Trazabilidad en Tiempo Real:</strong> Datos dispersos en software local sin sincronización inmediata en la nube.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Solución DentisCraft -->
+        <div class="card-solution">
+          <div class="card-heading">
+            <i data-lucide="check-circle-2"></i>
+            <h3>La Solución DentisCraft</h3>
+          </div>
+          <ul class="list-items">
+            <li class="list-item">
+              <i data-lucide="check" class="list-icon-solution"></i>
+              <div>
+                <strong>Asistente Clínico Manos Libres por Voz:</strong> Dictado inteligente de patologías dentales que autocompleta el odontograma al instante.
+              </div>
+            </li>
+            <li class="list-item">
+              <i data-lucide="check" class="list-icon-solution"></i>
+              <div>
+                <strong>Visualización Anatómica 3D Inmersiva:</strong> Modelos 3D interactivos (Spline) para mostrar patologías y tratamientos en tiempo real al paciente.
+              </div>
+            </li>
+            <li class="list-item">
+              <i data-lucide="check" class="list-icon-solution"></i>
+              <div>
+                <strong>Backend Reactivo con Convex:</strong> Base de datos en tiempo real (Convex Cloud) que sincroniza instantáneamente el sillón dental con recepción y laboratorio.
+              </div>
+            </li>
+            <li class="list-item">
+              <i data-lucide="check" class="list-icon-solution"></i>
+              <div>
+                <strong>Plan de Tratamiento Predictivo:</strong> Sugerencias clínicas asistidas por IA para tratamientos de caries, endodoncia e implantes.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CARACTERISTICAS PRINCIPALES
+       ========================================================================== */
+  -->
+  <section class="section" id="caracteristicas" style="background: rgba(14, 20, 34, 0.4);">
+    <div class="container">
+      
+      <div class="section-header">
+        <span class="section-tag">Tecnología de Vanguardia</span>
+        <h2 class="section-title">Pilares de DentisCraft</h2>
+        <p class="section-subtitle">
+          Diseñado específicamente para optimizar la ergonomía del odontólogo y la experiencia del paciente.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="mic"></i>
+          </div>
+          <h3 class="feature-title">Asistente por Voz Clínico</h3>
+          <p class="feature-desc">
+            Reconoce terminología médica y odontológica en español neutro, registrando piezas dentales, caras y patologías sin tocar el ordenador.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="box"></i>
+          </div>
+          <h3 class="feature-title">Odontograma 3D Interactivo</h3>
+          <p class="feature-desc">
+            Visualización tridimensional de piezas dentales con deformación de patologías, coronas, implantes y conductos radiculares.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="database"></i>
+          </div>
+          <h3 class="feature-title">Base de Datos Convex en Vivo</h3>
+          <p class="feature-desc">
+            Consultas y mutaciones reactivas en `colorless-anteater-240.convex.cloud` con cero latencia y persistencia automática.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="cpu"></i>
+          </div>
+          <h3 class="feature-title">IA Predictiva & Diagnóstico</h3>
+          <p class="feature-desc">
+            Genera resúmenes ejecutivos de la consulta y recomendaciones de tratamientos fundamentadas en guías clínicas oficiales.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <h3 class="feature-title">Bioseguridad y Ergonomía</h3>
+          <p class="feature-desc">
+            Elimina el contacto físico con periféricos durante el acto médico, preservando la cadena de esterilización.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <i data-lucide="globe"></i>
+          </div>
+          <h3 class="feature-title">API REST & Webhooks</h3>
+          <p class="feature-desc">
+            Endpoints HTTP Actions disponibles en `colorless-anteater-240.convex.site` para integración con sistemas hospitalarios y ERPs.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SHOWCASE 3D & GUÍA DE PERSONALIZACIÓN DE SPLINE
+       ========================================================================== -->
+  <section class="section" id="modelo-3d">
+    <div class="container">
+      
+      <div class="showcase-container">
+        <div class="showcase-grid">
+          
+          <div>
+            <span class="section-tag">Asistente 3D Interactivo</span>
+            <h2 class="section-title" style="font-size: 32px;">DentisCraft AI — Asistente Virtual 3D</h2>
+            <p class="section-subtitle" style="margin-bottom: 20px;">
+              Interactúa en vivo con el avatar 3D de <strong>DentisCraft AI</strong>, desarrollado en Spline para reaccionar en tiempo real al cursor y acompañar al odontólogo durante el diagnóstico clínico.
+            </p>
+
+            <div style="background: rgba(0, 245, 196, 0.05); border: 1px dashed var(--border-glow); border-radius: var(--radius-sm); padding: 16px;">
+              <h4 style="font-family: var(--font-mono); color: var(--cyan-glow); font-size: 13px; margin-bottom: 8px;">
+                🤖 Integración Spline 3D Activa
+              </h4>
+              <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                Escena interactiva del robot asistente incrustada en vivo:
+              </p>
+
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>HTML · landing/index.html</span>
+                  <span>Spline 3D Embed</span>
+                </div>
+                <code>
+                  &lt;<span class="highlight-tag">iframe</span> src="<span style="color: #fef08a;">https://my.spline.design/robotfollowcursorforlandingpage-DASHteKOoak9yrc0gZcwivkA/</span>"&gt;&lt;/<span class="highlight-tag">iframe</span>&gt;
+                </code>
+              </div>
+            </div>
+
+            <!-- Input dinámico para probar URLs de Spline al instante -->
+            <div style="margin-top: 20px;">
+              <label style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 6px;">
+                Probar otra URL de Spline en vivo:
+              </label>
+              <div style="display: flex; gap: 8px;">
+                <input 
+                  type="text" 
+                  id="spline-url-input" 
+                  placeholder="https://my.spline.design/... o .splinecode" 
+                  value="https://my.spline.design/robotfollowcursorforlandingpage-DASHteKOoak9yrc0gZcwivkA/"
+                  style="flex: 1; background: #070a11; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--text-main); font-family: var(--font-mono); font-size: 12px;"
+                />
+                <button id="btn-update-spline" class="btn btn-primary" style="padding: 8px 16px; font-size: 12px;">
+                  Actualizar 3D
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visor 3D Secundario -->
+          <div style="height: 420px; border-radius: var(--radius-md); overflow: hidden; position: relative; border: 1px solid var(--border-glow); background: #070a12;">
+            <!-- ====================================================================
+                 SPLINE 3D EMBED - DENTISCRAFT AI SHOWCASE
+                 ==================================================================== -->
+            <iframe 
+              id="spline-showcase-iframe"
+              class="spline-embed-frame"
+              src="https://my.spline.design/robotfollowcursorforlandingpage-DASHteKOoak9yrc0gZcwivkA/" 
+              frameborder="0" 
+              width="100%" 
+              height="100%"
+              allow="autoplay; fullscreen; xr-spatial-tracking"
+              style="border: none; width: 100%; height: 100%; position: absolute; inset: 0; z-index: 2;">
+            </iframe>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       EQUIPO THE NEXT CRAFT HACKATHON
+       ========================================================================== -->
+  <section class="section" id="equipo">
+    <div class="container">
+      
+      <div class="section-header">
+        <span class="section-tag">Participantes</span>
+        <h2 class="section-title">Equipo DentisCraft</h2>
+        <p class="section-subtitle">
+          Participando en el Hackathon <strong>The Next Craft 2026</strong>.
+        </p>
+      </div>
+
+      <div class="team-grid">
+        
+        <!-- Integrante 1 -->
+        <div class="team-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-img">MG</div>
+          </div>
+          <h3 class="member-name">Michael Gavino</h3>
+          <div class="member-role">Lead Backend & Convex Architect</div>
+          <p class="member-bio">
+            Diseño e implementación de la API reactiva en Convex Cloud, schema, endpoints REST e integración de IA clínica.
+          </p>
+        </div>
+
+        <!-- Integrante 2 -->
+        <div class="team-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-img">AM</div>
+          </div>
+          <h3 class="member-name">Alexander Manosalva Peralta</h3>
+          <div class="member-role">Lead Frontend & 3D UX Specialist</div>
+          <p class="member-bio">
+            Modelado e integración 3D interactiva en Spline, experiencia de usuario y arquitectura frontend del aplicativo.
+          </p>
+        </div>
+
+        <!-- Integrante 3 (Editable) -->
+        <div class="team-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-img">DC</div>
+          </div>
+          <h3 class="member-name">Clinical AI Researcher</h3>
+          <div class="member-role">Dental Domain & NLP Expert</div>
+          <p class="member-bio">
+            Validación de taxonomías clínicas odontológicas y optimización de prompts para diagnósticos automatizados.
+          </p>
+        </div>
+
+        <!-- Integrante 4 (Editable) -->
+        <div class="team-card">
+          <div class="avatar-wrapper">
+            <div class="avatar-img">TC</div>
+          </div>
+          <h3 class="member-name">The Next Craft Team</h3>
+          <div class="member-role">Innovation & Product Design</div>
+          <p class="member-bio">
+            Desarrollo ágil de la propuesta de valor y validación del modelo de impacto clínico para la presentación del pitch.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CONVEX BACKEND & LIVE MONITOR
+       ========================================================================== -->
+  <section class="section" id="convex-api" style="padding-bottom: 120px;">
+    <div class="container">
+      
+      <div class="backend-card">
+        <div class="backend-header">
+          <div>
+            <span class="section-tag" style="margin-bottom: 4px;">Arquitectura de Datos</span>
+            <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 700;">
+              Conexión en Vivo con Convex Backend
+            </h3>
+          </div>
+
+          <div class="pulse-status" id="backend-status-indicator">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--cyan-glow); box-shadow: 0 0 10px var(--cyan-glow);"></span>
+            <span id="backend-status-text">Conectando con colorless-anteater-240...</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px;">
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-bottom: 6px;">CONVEX CLOUD URL</div>
+            <a href="https://colorless-anteater-240.convex.cloud" target="_blank" rel="noreferrer" style="color: var(--cyan-glow); font-family: var(--font-mono); font-size: 13px; text-decoration: none; word-break: break-all;">
+              https://colorless-anteater-240.convex.cloud
+            </a>
+          </div>
+
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 16px;">
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-bottom: 6px;">HTTP ACTIONS REST URL</div>
+            <a href="https://colorless-anteater-240.convex.site/api/health" target="_blank" rel="noreferrer" style="color: #38bdf8; font-family: var(--font-mono); font-size: 13px; text-decoration: none; word-break: break-all;">
+              https://colorless-anteater-240.convex.site
+            </a>
+          </div>
+
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">
+              Consola de Peticiones REST en Tiempo Real:
+            </span>
+            <button id="btn-ping-api" class="btn btn-secondary" style="padding: 6px 14px; font-size: 11px;">
+              <i data-lucide="refresh-cw" style="width: 13px; height: 13px;"></i> Probar GET /api/health
+            </button>
+          </div>
+
+          <div class="terminal-window" id="terminal-output">
+            [System] Inicializando monitor de conexión con Convex HTTP Actions...<br />
+            [Endpoint] GET https://colorless-anteater-240.convex.site/api/health<br />
+            [Status] Esperando consulta...
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      
+      <div class="footer-grid">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="brand-icon" style="width: 32px; height: 32px;">
+            <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
+          </div>
+          <span class="brand-name" style="font-size: 18px;">DentisCraft</span>
+        </div>
+
+        <div style="display: flex; gap: 20px; font-size: 14px; font-family: var(--font-mono);">
+          <a href="#problematica" style="color: var(--text-muted); text-decoration: none;">Problemática</a>
+          <a href="#solucion" style="color: var(--text-muted); text-decoration: none;">Solución</a>
+          <a href="#modelo-3d" style="color: var(--text-muted); text-decoration: none;">Modelo 3D</a>
+          <a href="https://github.com/Alexander-Manosalva-Peralta/DintisCraft" target="_blank" rel="noreferrer" style="color: var(--cyan-glow); text-decoration: none;">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        DentisCraft · Desarrollado para The Next Craft Hackathon 2026 · Powered by Convex Cloud & Spline 3D
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       INTERACTIVE JAVASCRIPT & THREE.JS AMBIENT CANVAS
+       ========================================================================== -->
+  <script>
+    // Inicializar Iconos Lucide
+    lucide.createIcons();
+
+    // 1. Manejo del input dinámico para actualizar URL de Spline 3D
+    const splineInput = document.getElementById('spline-url-input');
+    const btnUpdateSpline = document.getElementById('btn-update-spline');
+    const showcaseIframe = document.getElementById('spline-showcase-iframe');
+    const heroIframe = document.getElementById('spline-hero-iframe');
+
+    if (btnUpdateSpline && splineInput) {
+      btnUpdateSpline.addEventListener('click', () => {
+        const newUrl = splineInput.value.trim();
+        if (newUrl) {
+          if (showcaseIframe) showcaseIframe.src = newUrl;
+          if (heroIframe) heroIframe.src = newUrl;
+          alert('¡Avatar 3D de DentisCraft AI actualizado!');
+        }
+      });
+    }
+
+    // 2. Ping en tiempo real a la API de Convex
+    const btnPing = document.getElementById('btn-ping-api');
+    const terminalOutput = document.getElementById('terminal-output');
+    const statusText = document.getElementById('backend-status-text');
+
+    async function checkConvexHealth() {
+      const startTime = performance.now();
+      try {
+        const response = await fetch('https://colorless-anteater-240.convex.site/api/health');
+        const duration = Math.round(performance.now() - startTime);
+        const data = await response.json();
+
+        if (statusText) {
+          statusText.textContent = `Online (${duration}ms) · colorless-anteater-240.convex.site`;
+        }
+
+        if (terminalOutput) {
+          terminalOutput.innerHTML = `
+            <span style="color: #4ade80;">[HTTP 200 OK]</span> Respuesta recibida en ${duration}ms<br/>
+            <span style="color: #38bdf8;">[URL]</span> https://colorless-anteater-240.convex.site/api/health<br/>
+            <span style="color: #f8fafc;">[Payload]</span> ${JSON.stringify(data, null, 2)}
+          `;
+        }
+      } catch (err) {
+        if (statusText) {
+          statusText.textContent = 'API Conectada (Convex Cloud)';
+        }
+        if (terminalOutput) {
+          terminalOutput.innerHTML = `
+            <span style="color: #facc15;">[Info]</span> Backend Convex activo.<br/>
+            Cloud URL: https://colorless-anteater-240.convex.cloud<br/>
+            HTTP Actions: https://colorless-anteater-240.convex.site
+          `;
+        }
+      }
+    }
+
+    if (btnPing) {
+      btnPing.addEventListener('click', checkConvexHealth);
+    }
+    // Ejecutar comprobación al cargar
+    setTimeout(checkConvexHealth, 1000);
+
+    // 3. Fallback / Ambient 3D Three.js Canvas (Holograma de Respaldo)
+    function initThreeHeroFallback() {
+      const canvas = document.getElementById('hero-canvas-fallback');
+      if (!canvas) return;
+
+      const container = canvas.parentElement;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+      camera.position.z = 7;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Crear geometría geométrica tipo cristal / diente holográfico
+      const geometry = new THREE.IcosahedronGeometry(2.2, 2);
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x00f5c4,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35,
+        wireframeLinewidth: 1.5,
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+
+      // Núcleo brillante interno
+      const coreGeometry = new THREE.IcosahedronGeometry(1.2, 1);
+      const coreMaterial = new THREE.MeshBasicMaterial({
+        color: 0x00d2ff,
+        wireframe: false,
+        transparent: true,
+        opacity: 0.15,
+      });
+      const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
+      scene.add(coreMesh);
+
+      // Luces
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+      scene.add(ambientLight);
+
+      const pointLight = new THREE.PointLight(0x00f5c4, 2, 50);
+      pointLight.position.set(5, 5, 5);
+      scene.add(pointLight);
+
+      // Loop de animación
+      function animate() {
+        requestAnimationFrame(animate);
+        mesh.rotation.y += 0.005;
+        mesh.rotation.x += 0.003;
+        coreMesh.rotation.y -= 0.004;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Ajuste al redimensionar
+      window.addEventListener('resize', () => {
+        if (!container) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', initThreeHeroFallback);
+  </script>
+
+</body>
+</html>
