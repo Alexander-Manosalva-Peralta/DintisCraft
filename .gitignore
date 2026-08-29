@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment Variables
+.env
+.env.local
+**/.env.local
+**/.env
+
+# Build & Cache
+.next/
+**/.next/
+out/
+dist/
+.convex/
+**/.convex/
+tsconfig.tsbuildinfo
+*.log
+
+# Separate frontend folder (kept locally, ignored in repo)
+reflejo/
+
+# OS files
+.DS_Store
+Thumbs.db

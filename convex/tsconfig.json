@@ -1,0 +1,20 @@
+{
+  /* This tsconfig is configured for Convex functions to run in their custom environment */
+  "compilerOptions": {
+    /* Target latest JavaScript features */
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+    "skipLibCheck": true,
+
+    /* Convex specific settings */
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["./**/*"]
+}

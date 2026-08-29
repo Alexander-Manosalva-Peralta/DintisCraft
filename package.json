@@ -1,0 +1,28 @@
+{
+  "name": "apiconvex",
+  "version": "1.0.0",
+  "description": "Convex Backend & REST API standalone project",
+  "main": "convex/http.ts",
+  "scripts": {
+    "dev": "convex dev",
+    "deploy": "convex deploy",
+    "codegen": "convex codegen",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "convex",
+    "api",
+    "rest",
+    "realtime",
+    "backend"
+  ],
+  "author": "Alexander Manosalva Peralta",
+  "license": "MIT",
+  "dependencies": {
+    "convex": "^1.45.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "typescript": "^5.5.3"
+  }
+}
