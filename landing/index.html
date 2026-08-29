@@ -3,33 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>DentisCraft (Dentaris) — El odontólogo habla. La ficha se escribe sola.</title>
-<meta name="description" content="Asistente clínico de voz para odontólogos. Dicta la consulta y la historia clínica se construye sola, lista en PDF. Proyecto de The Next Crack.">
+<title>DentisCraft — Guía y Manual de Usuario</title>
+<meta name="description" content="Guía y manual de usuario oficial de DentisCraft. Asistente clínico dental inteligente con interfaz espacial y control por voz. Proyecto de The Next Crack.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
-   DENTARIS · pitch — The Next Crack
-   Reglas aplicadas:
-   · HIG layout: agrupar con padding/alineación, no cajas anidadas ·
-     hit target 44px · un color = un significado · jerarquía por
-     posición y alineación antes que por color.
-   · Apple motion: springs críticamente amortiguados (damping 1.0,
-     response 0.3–0.4) · scroll-progress amortiguado, no lineal ·
-     animar solo transform/opacity · feedback en pointer-down ·
-     materiales translúcidos con scroll edge effect, sin bordes duros ·
-     tracking negativo en display, ~0 en cuerpo · reduced motion,
-     reduced transparency y contrast atendidos.
-   Renombrar producto: buscar y reemplazar "Dentaris".
+   DENTISCRAFT · Guía y Manual de Usuario — The Next Crack
+   Apple HIG layout: jerarquía espacial, materiales translúcidos,
+   springs de amortiguación crítica, canvas 3D interactivo.
    ═══════════════════════════════════════════════════════════ */
 
 :root{
-  /* Un color, un significado (HIG §6) */
-  --sea:   #5EC8AE;   /* = el asistente está activo / interactivo */
-  --ind:   #7C9CE8;   /* = dato estructurado */
-  --amber: #E0B571;   /* = documento emitido */
-  --warn:  #D89A8E;   /* = requiere confirmación */
+  --sea:   #5EC8AE;   /* Asistente activo / interactivo */
+  --ind:   #7C9CE8;   /* Dato estructurado */
+  --amber: #E0B571;   /* Documento emitido */
+  --warn:  #D89A8E;   /* Requiere confirmación */
+  --purp:  #B598E8;   /* Error o ambigüedad */
 
   --bg:    #05070A;
   --ink:   #F4F6F7;
@@ -39,7 +30,6 @@
   --hair-2:rgba(255,255,255,.18);
   --mat:   rgba(255,255,255,.055);
 
-  /* tipografía: sistema primero — ya trae optical sizing y tracking */
   --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
 
@@ -52,7 +42,6 @@ html{-webkit-text-size-adjust:100%}
 body{
   background:var(--bg); color:var(--ink);
   font-family:var(--sans);
-  /* cuerpo: tracking en 0, leading cómodo (§15) */
   font-size:clamp(1.0625rem, .55vw + .95rem, 1.25rem);
   line-height:1.55; letter-spacing:0;
   font-weight:400; overflow-x:hidden;
@@ -63,7 +52,7 @@ button{font:inherit; color:inherit; background:none; border:none; cursor:pointer
 a{color:inherit}
 ::selection{background:rgba(94,200,174,.3)}
 
-/* ── campo de fondo: llena la página sin ruido ── */
+/* ── campo de fondo ── */
 .field{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
 .field .glow{position:absolute; border-radius:50%; filter:blur(110px)}
 .g1{width:78vw; height:78vw; left:-24vw; top:-22vw; background:radial-gradient(circle,rgba(30,92,82,.55),transparent 66%)}
@@ -78,8 +67,6 @@ a{color:inherit}
 }
 .field .vignette{position:absolute; inset:0; background:radial-gradient(ellipse 120% 90% at 50% 0%, transparent 40%, rgba(0,0,0,.65))}
 
-/* ── capas fotográficas de fondo con URLs de alta resolución ──
-   Campos de luz desenfocados y fotografía clínica ambiental. */
 .photo{position:absolute; inset:-8% -4%; background-size:cover; background-position:center;
   mix-blend-mode:soft-light; opacity:0; transition:opacity 1.2s ease; will-change:transform}
 .photo.show{opacity:1}
@@ -87,13 +74,11 @@ a{color:inherit}
 .ph-hero{background-image:url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop'); opacity:.55}
 .ph-room{background-image:url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=2070&auto=format&fit=crop')}
 .ph-enamel{background-image:url('https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=2074&auto=format&fit=crop')}
-/* pieza dental en 3D, nube de puntos — se gira con el scroll y el puntero */
+
 #bgCanvas{position:absolute; inset:0; width:100%; height:100%; opacity:.55}
-/* luz suave que sigue al cursor (amortiguada) */
 .spot{position:absolute; width:46rem; height:46rem; left:0; top:0; margin:-23rem 0 0 -23rem; border-radius:50%;
   background:radial-gradient(circle, rgba(150,190,180,.10), transparent 62%); filter:blur(30px); will-change:transform}
 
-/* carrusel de fondo: bandas de fragmentos clínicos, muy desenfocadas */
 .has-strip{overflow:hidden}
 .has-strip > .wrap{position:relative; z-index:2}
 .strip{position:absolute; left:0; right:0; z-index:0; pointer-events:none;
@@ -115,19 +100,19 @@ a{color:inherit}
 main{position:relative; z-index:2}
 .wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut)}
 
-/* ── escala tipográfica: tracking negativo que crece con el tamaño ── */
-.d1{font-size:clamp(3rem, 8.2vw, 7.25rem); line-height:.93; letter-spacing:-.045em; font-weight:600}
-.d2{font-size:clamp(2.25rem, 5.6vw, 4.75rem); line-height:1.0;  letter-spacing:-.035em; font-weight:600}
-.d3{font-size:clamp(1.6rem, 2.9vw, 2.5rem);  line-height:1.12; letter-spacing:-.025em; font-weight:600}
-.lead{font-size:clamp(1.15rem, 1.1vw + .9rem, 1.6rem); line-height:1.42; letter-spacing:-.012em; color:var(--ink-2); font-weight:400; max-width:34ch}
+/* ── escala tipográfica ── */
+.d1{font-size:clamp(2.75rem, 7.5vw, 6.5rem); line-height:.95; letter-spacing:-.045em; font-weight:600}
+.d2{font-size:clamp(2.1rem, 5.2vw, 4.25rem); line-height:1.02; letter-spacing:-.035em; font-weight:600}
+.d3{font-size:clamp(1.5rem, 2.7vw, 2.25rem); line-height:1.15; letter-spacing:-.025em; font-weight:600}
+.lead{font-size:clamp(1.1rem, 1.1vw + .85rem, 1.5rem); line-height:1.45; letter-spacing:-.012em; color:var(--ink-2); font-weight:400; max-width:38ch}
 .kicker{font-family:var(--mono); font-size:.8125rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
-.tint-sea{color:var(--sea)} .tint-amber{color:var(--amber)} .tint-ind{color:var(--ind)}
+.tint-sea{color:var(--sea)} .tint-amber{color:var(--amber)} .tint-ind{color:var(--ind)} .tint-warn{color:var(--warn)} .tint-purp{color:var(--purp)}
 .dim{color:var(--ink-3)}
 
 section{position:relative}
-.pad{padding-block:clamp(6rem, 14vh, 11rem)}
+.pad{padding-block:clamp(5rem, 12vh, 9.5rem)}
 
-/* ── chrome translúcido con scroll edge effect (sin borde duro) ── */
+/* ── chrome translúcido ── */
 .chrome{position:fixed; top:0; left:0; right:0; height:8rem; z-index:50; pointer-events:none;
   backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%);
   mask-image:linear-gradient(to bottom, #000 34%, transparent 100%);
@@ -149,8 +134,8 @@ nav.solid .nav-mat{opacity:1}
 .brand{display:flex; align-items:center; gap:.625rem; font-weight:600; letter-spacing:-.02em; font-size:1.0625rem; text-decoration:none}
 .brand svg{width:1.5rem; height:1.5rem; flex:none}
 .nav-mid{position:relative; display:flex; gap:.25rem}
-.nav-mid a{position:relative; padding:.625rem .875rem; min-height:2.75rem; display:flex; align-items:center;
-  font-size:.9375rem; color:var(--ink-2); text-decoration:none; border-radius:999px; transition:color .3s}
+.nav-mid a{position:relative; padding:.625rem .75rem; min-height:2.75rem; display:flex; align-items:center;
+  font-size:.875rem; color:var(--ink-2); text-decoration:none; border-radius:999px; transition:color .3s}
 .nav-mid a:hover, .nav-mid a.here{color:var(--ink)}
 #navPill{position:absolute; top:0; height:100%; border-radius:999px; background:rgba(255,255,255,.09); z-index:-1; opacity:0}
 .nav-cta{display:flex; align-items:center; min-height:2.75rem; padding:0 1.125rem; border-radius:999px;
@@ -158,20 +143,20 @@ nav.solid .nav-mat{opacity:1}
   transition:transform .1s ease-out, filter .3s}
 .nav-cta:active{transform:scale(.97)}
 .nav-cta:hover{filter:brightness(1.08)}
-@media(max-width:940px){.nav-mid{display:none}}
+@media(max-width:1040px){.nav-mid{display:none}}
 
 /* ── hero ── */
 .hero{min-height:100svh; display:flex; flex-direction:column; justify-content:center; align-items:center;
-  text-align:center; padding:9rem var(--gut) 4rem; position:relative}
-.hero-head{max-width:20ch}
+  text-align:center; padding:8.5rem var(--gut) 4rem; position:relative}
+.hero-head{max-width:24ch}
 .word{display:inline-block; will-change:transform,opacity}
 .badge{display:inline-flex; align-items:center; gap:.5rem; padding:.4375rem .875rem; border-radius:999px;
   background:var(--mat); border:1px solid var(--hair); font-family:var(--mono); font-size:.75rem;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-2); margin-bottom:2rem}
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-2); margin-bottom:1.75rem}
 .badge i{width:.4375rem; height:.4375rem; border-radius:50%; background:var(--sea); animation:beat 2.4s ease-in-out infinite}
 @keyframes beat{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.4; transform:scale(.85)}}
-.hero .lead{margin:1.75rem auto 0; text-align:center; max-width:40ch}
-.hero-cta{display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; margin-top:2.5rem}
+.hero .lead{margin:1.75rem auto 0; text-align:center; max-width:44ch}
+.hero-cta{display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; margin-top:2.25rem}
 .btn{display:inline-flex; align-items:center; gap:.5rem; min-height:3rem; padding:0 1.625rem; border-radius:999px;
   font-size:1rem; font-weight:500; text-decoration:none; transition:transform .1s ease-out, background .3s, filter .3s}
 .btn:active{transform:scale(.97)}
@@ -180,18 +165,18 @@ nav.solid .nav-mat{opacity:1}
 .btn-plain{color:var(--ink); background:rgba(255,255,255,.07)}
 .btn-plain:hover{background:rgba(255,255,255,.12)}
 
-.orb-wrap{position:relative; margin-top:3.5rem; display:grid; place-items:center; will-change:transform}
+.orb-wrap{position:relative; margin-top:3rem; display:grid; place-items:center; will-change:transform}
 .orb-halo{position:absolute; width:min(30rem,86vw); aspect-ratio:1; border-radius:50%;
   background:radial-gradient(circle, rgba(94,200,174,.24), transparent 60%); filter:blur(24px)}
-#orb{width:min(19rem,58vw); height:auto; position:relative}
+#orb{width:min(18rem,54vw); height:auto; position:relative}
 
-.scroll-cue{position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+.scroll-cue{position:absolute; bottom:1.75rem; left:50%; transform:translateX(-50%);
   font-family:var(--mono); font-size:.6875rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3);
   display:flex; flex-direction:column; align-items:center; gap:.625rem}
 .scroll-cue span{width:1px; height:2.25rem; background:linear-gradient(var(--hair-2), transparent)}
 
 /* ── declaración con revelado por palabra ── */
-.statement{max-width:26ch; margin-inline:auto; text-align:center}
+.statement{max-width:32ch; margin-inline:auto; text-align:center}
 .statement .w{color:rgba(244,246,247,.13); transition:color .45s ease}
 .statement .w.lit{color:var(--ink)}
 
@@ -205,13 +190,13 @@ nav.solid .nav-mat{opacity:1}
 .quotes{position:relative; min-height:16rem}
 @media(max-width:900px){.quotes{min-height:11rem}}
 .quote{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
-  font-size:clamp(1.5rem, 2.7vw, 2.4rem); line-height:1.2; letter-spacing:-.025em; font-weight:500;
+  font-size:clamp(1.4rem, 2.5vw, 2.2rem); line-height:1.22; letter-spacing:-.025em; font-weight:500;
   will-change:transform,opacity}
 .quote .who{font-family:var(--mono); font-size:.75rem; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-3); margin-bottom:1.25rem; font-weight:400}
 .quote em{font-style:normal; color:var(--sea)}
 
-/* documento: UNA superficie, sin cajas anidadas (HIG §3) */
+/* documento */
 .doc{border-radius:1.75rem; padding:clamp(1.5rem,2.6vw,2.25rem);
   background:linear-gradient(160deg, rgba(255,255,255,.085), rgba(255,255,255,.028));
   border:1px solid var(--hair); backdrop-filter:blur(30px) saturate(150%); -webkit-backdrop-filter:blur(30px) saturate(150%);
@@ -244,11 +229,7 @@ nav.solid .nav-mat{opacity:1}
 .tooth.caries{background:rgba(216,154,142,.22); border-color:rgba(216,154,142,.55); color:#F0C6BC}
 .tooth.rest{background:rgba(124,156,232,.2); border-color:rgba(124,156,232,.5); color:#C3D2F5}
 
-.odo-big{display:grid; grid-template-columns:repeat(8,1fr); gap:clamp(.375rem,.8vw,.75rem);
-  max-width:52rem; margin:3rem auto 0}
-.odo-big .tooth{font-size:clamp(.625rem,1vw,.8125rem); border-radius:clamp(.5rem,1vw,.875rem)}
-
-/* ── segmentado (estados de la cara) ── */
+/* ── segmentado (estados del asistente visual) ── */
 .face-stage{display:grid; grid-template-columns:auto 1fr; gap:clamp(2rem,5vw,5rem); align-items:center}
 @media(max-width:820px){.face-stage{grid-template-columns:1fr; text-align:center; justify-items:center}}
 #faceBig{width:min(20rem,64vw); height:auto}
@@ -259,12 +240,12 @@ nav.solid .nav-mat{opacity:1}
 .seg button:active{transform:scale(.97)}
 .seg button.on{color:var(--ink)}
 #segPill{position:absolute; top:.25rem; bottom:.25rem; border-radius:999px; background:rgba(255,255,255,.12); z-index:1}
-@media(max-width:560px){.seg{flex-wrap:wrap; border-radius:1.25rem} #segPill{display:none} .seg button.on{background:rgba(255,255,255,.12)}}
-.state-copy{min-height:5rem; margin-top:1.5rem}
-.state-copy p{opacity:0; transition:opacity .35s ease; position:absolute; max-width:38ch}
+@media(max-width:700px){.seg{flex-wrap:wrap; border-radius:1.25rem} #segPill{display:none} .seg button.on{background:rgba(255,255,255,.12)}}
+.state-copy{min-height:5.5rem; margin-top:1.5rem}
+.state-copy p{opacity:0; transition:opacity .35s ease; position:absolute; max-width:44ch}
 .state-copy p.on{opacity:1; position:relative}
 
-/* ── cifras: separadas por hairline, sin cajas ── */
+/* ── cifras ── */
 .figures{display:grid; grid-template-columns:repeat(3,1fr); gap:0}
 @media(max-width:820px){.figures{grid-template-columns:1fr}}
 .fig{padding:clamp(1.5rem,3vw,2.5rem) clamp(1rem,2vw,2rem)}
@@ -273,15 +254,36 @@ nav.solid .nav-mat{opacity:1}
 .fig b{display:block; font-size:clamp(3rem,7vw,5.5rem); line-height:.9; letter-spacing:-.05em; font-weight:600}
 .fig p{margin-top:1rem; font-size:1.0625rem; max-width:24ch}
 
-/* ── lista editorial (reemplaza la grilla de cards) ── */
+/* ── lista editorial ── */
 .rows{border-top:1px solid var(--hair)}
-.erow{display:grid; grid-template-columns:auto 1fr minmax(0,32ch); gap:clamp(1rem,3vw,3rem);
+.erow{display:grid; grid-template-columns:auto 1fr minmax(0,36ch); gap:clamp(1rem,3vw,3rem);
   align-items:baseline; padding:clamp(1.5rem,3vw,2.25rem) 0; border-bottom:1px solid var(--hair);
   transition:opacity .4s ease}
-@media(max-width:820px){.erow{grid-template-columns:1fr; gap:.625rem}}
-.erow .tag{font-family:var(--mono); font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); min-width:7rem}
-.erow h3{font-size:clamp(1.35rem,2.3vw,1.9rem); letter-spacing:-.025em; font-weight:600; line-height:1.15}
-.erow p{font-size:1.0625rem}
+@media(max-width:860px){.erow{grid-template-columns:1fr; gap:.625rem}}
+.erow .tag{font-family:var(--mono); font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); min-width:8rem}
+.erow h3{font-size:clamp(1.3rem,2.2vw,1.85rem); letter-spacing:-.025em; font-weight:600; line-height:1.18}
+.erow p{font-size:1.0625rem; color:var(--ink-2)}
+
+/* ── paneles y tablas de comandos ── */
+.grid-panels{display:grid; grid-template-columns:1fr 1fr; gap:clamp(1.25rem, 2.5vw, 2rem); margin-top:2.5rem}
+@media(max-width:900px){.grid-panels{grid-template-columns:1fr}}
+.panel{border-radius:1.5rem; padding:clamp(1.5rem,2.5vw,2.25rem);
+  background:linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+  border:1px solid var(--hair); backdrop-filter:blur(24px) saturate(140%); -webkit-backdrop-filter:blur(24px) saturate(140%);
+  display:flex; flex-direction:column; justify-content:space-between}
+.panel h3{font-size:1.4rem; letter-spacing:-.02em; font-weight:600; margin-bottom:.75rem}
+.panel p{font-size:1.0625rem; color:var(--ink-2); line-height:1.5}
+
+.cmd-table{width:100%; border-collapse:collapse; margin-top:1.5rem; font-size:.9375rem}
+.cmd-table th{text-align:left; font-family:var(--mono); font-size:.6875rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); padding-bottom:.75rem; border-bottom:1px solid var(--hair)}
+.cmd-table td{padding:.875rem 0; border-bottom:1px solid rgba(255,255,255,.05); vertical-align:top}
+.cmd-table td:first-child{font-weight:600; color:var(--ink); width:32%; padding-right:1rem}
+.cmd-table td:last-child{color:var(--ink-2); font-family:var(--mono); font-size:.875rem}
+
+.chip-list{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.25rem}
+.chip{padding:.375rem .75rem; border-radius:999px; background:rgba(255,255,255,.06);
+  border:1px solid var(--hair); font-family:var(--mono); font-size:.8125rem; color:var(--sea)}
 
 /* ── equipo ── */
 .people{display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--hair)}
@@ -299,7 +301,7 @@ nav.solid .nav-mat{opacity:1}
 
 /* ── cierre ── */
 .close{text-align:center; padding-block:clamp(7rem,16vh,12rem)}
-.close .d2{max-width:16ch; margin:1.5rem auto 1.75rem}
+.close .d2{max-width:20ch; margin:1.5rem auto 1.75rem}
 footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
 .foot{display:flex; flex-wrap:wrap; justify-content:space-between; gap:1rem;
   font-family:var(--mono); font-size:.75rem; letter-spacing:.08em; color:var(--ink-3)}
@@ -311,7 +313,6 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
 
 :focus-visible{outline:2px solid var(--sea); outline-offset:3px; border-radius:.5rem}
 
-/* ── accesibilidad: 3 señales independientes ── */
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important; transition-duration:.01ms !important}
   .rise{opacity:1 !important; transform:none !important}
@@ -321,19 +322,17 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   .quote{position:relative; inset:auto; opacity:1 !important; transform:none !important}
   .row .val{opacity:1; color:var(--ink); transform:none}
   .statement .w{color:var(--ink)}
-}
-@media (prefers-reduced-motion: reduce){
   .spot{display:none}
   #bgCanvas{opacity:.32}
 }
 @media (prefers-reduced-transparency: reduce){
-  .doc,.nav-mat{background:#12161B; backdrop-filter:none; -webkit-backdrop-filter:none}
+  .doc,.nav-mat,.panel{background:#12161B; backdrop-filter:none; -webkit-backdrop-filter:none}
   .chrome{backdrop-filter:none; background:rgba(5,7,10,.92)}
   .strip{opacity:.18}
 }
 @media (prefers-contrast: more){
   :root{--ink-2:#D5DBE0; --ink-3:#9AA4AD; --hair:rgba(255,255,255,.28)}
-  .doc,.nav-mat{background:#0C1014; border-color:rgba(255,255,255,.4)}
+  .doc,.nav-mat,.panel{background:#0C1014; border-color:rgba(255,255,255,.4)}
 }
 </style>
 </head>
@@ -349,7 +348,6 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   <div class="mesh"></div><div class="vignette"></div>
 </div>
 
-<!-- plantilla de fragmentos para las bandas del carrusel -->
 <template id="frames">
   <div class="frame"><svg viewBox="0 0 200 120" fill="none" stroke="rgba(255,255,255,.32)">
     <g stroke-width="1.4">
@@ -377,29 +375,6 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
     <g stroke="rgba(224,181,113,.7)" stroke-width="4" stroke-linecap="round"><path d="M50 76h44"/></g>
     <g stroke="rgba(255,255,255,.3)" stroke-width="4" stroke-linecap="round"><path d="M50 90h80"/></g>
   </svg></div>
-
-  <div class="frame"><svg viewBox="0 0 200 120" fill="none">
-    <circle cx="100" cy="60" r="44" stroke="rgba(255,255,255,.16)"/>
-    <circle cx="100" cy="60" r="34" stroke="rgba(94,200,174,.5)" stroke-dasharray="2 8" stroke-linecap="round"/>
-    <ellipse cx="88" cy="55" rx="4.5" ry="9" fill="rgba(94,200,174,.8)"/>
-    <ellipse cx="112" cy="55" rx="4.5" ry="9" fill="rgba(94,200,174,.8)"/>
-    <path d="M89 74q11 7 22 0" stroke="rgba(94,200,174,.8)" stroke-width="2.6" stroke-linecap="round"/>
-  </svg></div>
-
-  <div class="frame"><svg viewBox="0 0 200 120" fill="none">
-    <path d="M22 60h156" stroke="rgba(255,255,255,.18)"/>
-    <g fill="rgba(124,156,232,.6)"><circle cx="42" cy="60" r="5"/><circle cx="84" cy="60" r="5"/><circle cx="126" cy="60" r="5"/><circle cx="164" cy="60" r="5"/></g>
-    <g stroke="rgba(255,255,255,.24)" stroke-width="3" stroke-linecap="round">
-      <path d="M34 40h16M76 40h16M118 40h16M156 40h16M34 82h22M76 82h18M118 82h24M156 82h14"/>
-    </g></svg></div>
-
-  <div class="frame"><svg viewBox="0 0 200 120" fill="none">
-    <g fill="rgba(255,255,255,.16)">
-      <rect x="26" y="70" width="20" height="34" rx="5"/><rect x="56" y="52" width="20" height="52" rx="5"/>
-      <rect x="86" y="60" width="20" height="44" rx="5"/><rect x="116" y="34" width="20" height="70" rx="5"/>
-    </g>
-    <rect x="146" y="22" width="20" height="82" rx="5" fill="rgba(94,200,174,.4)"/>
-  </svg></div>
 </template>
 <div class="grain" aria-hidden="true"></div>
 
@@ -415,10 +390,13 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   </a>
   <div class="nav-mid" id="navMid">
     <div id="navPill"></div>
-    <a href="#consulta">Consulta</a>
+    <a href="#que-es">Que es</a>
+    <a href="#asistente">Asistente Visual</a>
+    <a href="#voz">Control por Voz</a>
+    <a href="#comandos">Comandos</a>
     <a href="#dictado">Dictado</a>
-    <a href="#odontograma">Odontograma</a>
-    <a href="#asistente">Asistente</a>
+    <a href="#pdf">Historial PDF</a>
+    <a href="#requisitos">Requisitos</a>
     <a href="#equipo">Equipo</a>
   </div>
   <a href="#dictado" class="nav-cta">Ver el dictado</a>
@@ -428,12 +406,12 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
-  <div class="badge"><i></i> The Next Crack · 2026</div>
-  <h1 class="d1 hero-head" id="heroHead">El odontólogo habla. <span class="tint-sea">La ficha se escribe sola.</span></h1>
-  <p class="lead">Un asistente clínico que escucha la consulta, entiende terminología odontológica y entrega la historia clínica completa en PDF. Sin teclado, sin dictar formato, sin escribir de memoria al final del día.</p>
+  <div class="badge"><i></i> The Next Crack · 2026 · Guía y Manual de Usuario</div>
+  <h1 class="d1 hero-head" id="heroHead">DentisCraft. <span class="tint-sea">Guía y Manual de Usuario.</span></h1>
+  <p class="lead">DentisCraft es un asistente clínico dental inteligente con interfaz espacial y control por voz diseñado para que el odontólogo pueda registrar fichas clínicas, odontogramas y presupuestos sin tocar el teclado ni el ratón durante la consulta odontológica.</p>
   <div class="hero-cta">
-    <a href="#dictado" class="btn btn-fill">Ver el dictado</a>
-    <a href="#consulta" class="btn btn-plain">Por qué existe</a>
+    <a href="#dictado" class="btn btn-fill">Ver el dictado en vivo</a>
+    <a href="#que-es" class="btn btn-plain">Que es DentisCraft</a>
   </div>
 
   <div class="orb-wrap" id="orbWrap">
@@ -451,10 +429,10 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
 </section>
 
 <!-- ══════════ DECLARACIÓN ══════════ -->
-<section class="pad" id="consulta">
+<section class="pad" id="que-es">
   <div class="wrap">
-    <p class="kicker rise" style="text-align:center; margin-bottom:2.5rem">La consulta hoy</p>
-    <h2 class="d2 statement" id="stmt">La historia clínica se escribe con guantes puestos, entre paciente y paciente, y casi siempre de memoria.</h2>
+    <p class="kicker rise" style="text-align:center; margin-bottom:2.5rem">Propósito Clínico</p>
+    <h2 class="d2 statement" id="stmt">En una consulta dental, el odontólogo tiene las manos enguantadas e higienizadas. DentisCraft permite dictar en lenguaje natural todo el proceso de atención médica.</h2>
   </div>
 </section>
 
@@ -462,74 +440,55 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
 <section class="pad" style="padding-top:0">
   <div class="wrap">
     <div class="figures rise">
-      <div class="fig"><b data-n="15">0</b><p>minutos por paciente que se van en documentar en vez de atender.</p></div>
-      <div class="fig"><b data-n="70" data-s="%">0</b><p>de las fichas se terminan fuera del horario de consulta.</p></div>
-      <div class="fig"><b class="tint-amber" data-n="3" data-s=" s">0</b><p>es lo que tarda DentisCraft en emitir el PDF final.</p></div>
+      <div class="fig"><b data-n="15">0</b><p>minutos por paciente ahorrados en transcripción manual.</p></div>
+      <div class="fig"><b data-n="100" data-s="%">0</b><p>bioseguridad manos libres durante la intervención.</p></div>
+      <div class="fig"><b class="tint-amber" data-n="3" data-s=" s">0</b><p>para emitir la historia clínica oficial en formato PDF.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ DICTADO (fijado, movido por scroll) ══════════ -->
-<section id="dictado">
-  <div class="pin-track" id="pinTrack" style="height:520vh">
-    <div class="pin">
-      <div class="pin-grid">
+<!-- ══════════ CAPACIDADES EDITORIALES (QUE ES) ══════════ -->
+<section class="pad has-strip" style="padding-top:0">
+  <div class="wrap">
+    <p class="kicker rise" style="margin-bottom:1.75rem">Funcionalidades Principales</p>
+    <h2 class="d2 rise d-1" style="max-width:18ch; margin-bottom:3.5rem">Que es DentisCraft y para que sirve.</h2>
 
-        <div>
-          <p class="kicker" style="margin-bottom:1.75rem">Consulta en curso · 04:12</p>
-          <div class="quotes" id="quotes">
-            <div class="quote"><span class="who">Odontóloga</span>Paciente femenina de 34 años, acude por <em>dolor en el lado inferior derecho</em>.</div>
-            <div class="quote"><span class="who">Odontóloga</span>Refiere <em>sensibilidad al frío</em> desde hace dos semanas. No toma medicación.</div>
-            <div class="quote"><span class="who">Odontóloga</span>A la exploración, caries oclusal profunda en la <em>pieza cuatro seis</em>.</div>
-            <div class="quote"><span class="who">Odontóloga</span>También hay una obturación desgastada en la <em>pieza tres seis</em>.</div>
-            <div class="quote"><span class="who">Odontóloga</span>Diagnóstico: <em>pulpitis reversible</em> en la cuatro seis.</div>
-            <div class="quote"><span class="who">Odontóloga</span>Plan: resina compuesta y <em>control en un mes</em>. Cerrá la ficha.</div>
-          </div>
-          <p class="dim" style="font-size:1rem; margin-top:2rem">Cada frase cae en su campo. El odontograma se marca al nombrar la pieza. Desliza para avanzar la consulta.</p>
-        </div>
-
-        <div class="doc" id="doc">
-          <div class="doc-top">
-            <div>
-              <h4>Historia clínica odontológica</h4>
-              <div class="sub">L. Ramírez · 34 a · Control</div>
-            </div>
-            <div class="stamp" id="stamp">Borrador</div>
-          </div>
-
-          <div class="row" data-i="0"><div class="lab">Motivo de consulta</div><div class="val">Dolor en zona inferior derecha</div></div>
-          <div class="row" data-i="1"><div class="lab">Anamnesis</div><div class="val">Sensibilidad al frío, 2 semanas de evolución. Sin medicación actual.</div></div>
-          <div class="row" data-i="2"><div class="lab">Odontograma · FDI</div>
-            <div class="odo" id="odoSmall" aria-hidden="true"></div>
-          </div>
-          <div class="row" data-i="4"><div class="lab">Diagnóstico</div><div class="val">Pulpitis reversible — pieza 4.6</div></div>
-          <div class="row" data-i="5"><div class="lab">Plan de tratamiento</div><div class="val">Restauración con resina compuesta en 4.6. Control a 30 días.</div></div>
-
-          <div class="progress-line">
-            <span class="stamp" id="pdfLabel">Esperando dictado</span>
-            <div class="track"><div class="fillbar" id="fillbar"></div></div>
-          </div>
-        </div>
-
+    <div class="rows">
+      <div class="erow rise">
+        <div class="tag">01 · Paciente</div>
+        <h3>Datos de filiación</h3>
+        <p>Nombre, edad, teléfono, dirección, ocupación y lugar de nacimiento registrados sin tocar el teclado.</p>
+      </div>
+      <div class="erow rise">
+        <div class="tag">02 · Anamnesis</div>
+        <h3>Historia médica y exploración</h3>
+        <p>Alergias, antecedentes patológicos, hábitos y motivo de consulta estructurados automáticamente.</p>
+      </div>
+      <div class="erow rise">
+        <div class="tag">03 · Odontograma</div>
+        <h3>Odontograma gráfico interactivo</h3>
+        <p>Marcado de caries, restauraciones, piezas ausentes o sanas por número FDI o por cara dental.</p>
+      </div>
+      <div class="erow rise">
+        <div class="tag">04 · Presupuesto</div>
+        <h3>Plan de tratamiento</h3>
+        <p>Selección de procedimientos odontológicos del catálogo predefinido y cálculo automático de montos.</p>
+      </div>
+      <div class="erow rise">
+        <div class="tag">05 · Seguimiento</div>
+        <h3>Evolución clínica y pagos</h3>
+        <p>Registro de diagnósticos, tratamientos realizados, pagos a cuenta y cálculo del saldo pendiente.</p>
+      </div>
+      <div class="erow rise">
+        <div class="tag">06 · Documento</div>
+        <h3>PDF y despacho por correo</h3>
+        <p>Generación automática del historial clínico oficial en formato A4 de dos páginas con opción de envío directo al paciente.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ ODONTOGRAMA A ESCALA ══════════ -->
-<section class="pad" id="odontograma">
-  <div class="wrap" style="text-align:center">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Notación FDI</p>
-    <h2 class="d2 rise d-1" style="max-width:18ch; margin-inline:auto">Nombrá la pieza.<br>Se marca sola.</h2>
-    <p class="lead rise d-2" style="margin:1.75rem auto 0; text-align:center">DentisCraft interpreta “cuatro seis” como el primer molar inferior derecho y lo registra con su hallazgo, su superficie y la hora exacta en que lo dijiste.</p>
-    <div class="odo-big" id="odoBig" aria-hidden="true"></div>
-    <p class="kicker rise" style="margin-top:2rem; justify-content:center">
-      <span style="color:var(--warn)">■</span>&nbsp; Caries &nbsp;&nbsp; <span style="color:var(--ind)">■</span>&nbsp; Restauración
-    </p>
-  </div>
-</section>
-
-<!-- ══════════ ASISTENTE ══════════ -->
+<!-- ══════════ ASISTENTE VISUAL (ASCII & SPATIAL UI) ══════════ -->
 <section class="pad" id="asistente">
   <div class="wrap face-stage">
     <div style="position:relative; display:grid; place-items:center">
@@ -544,41 +503,291 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
     </div>
 
     <div>
-      <p class="kicker rise" style="margin-bottom:1.5rem">El asistente</p>
-      <h2 class="d2 rise d-1" style="max-width:14ch">Una cara que confirma.</h2>
-      <p class="lead rise d-2" style="margin-top:1.5rem">Con las manos ocupadas nadie lee una pantalla llena de texto. El asistente responde con gestos: te dice si escuchó, si está resolviendo algo o si necesita que confirmes.</p>
+      <p class="kicker rise" style="margin-bottom:1.5rem">Arquitectura Visual</p>
+      <h2 class="d2 rise d-1" style="max-width:18ch">Asistente Visual ASCII & Spatial UI.</h2>
+      <p class="lead rise d-2" style="margin-top:1.5rem">Interfaz con estética Apple Vision Pro / Cyberpunk. Cuenta con una cara generada en tiempo real que reacciona a cada evento y feedback por voz (TTS) para confirmar las acciones sin desviar la mirada del campo operatorio.</p>
 
       <div class="seg rise d-3" id="seg" role="tablist" aria-label="Estados del asistente">
         <div id="segPill"></div>
         <button class="on" data-s="listening">Escuchando</button>
         <button data-s="thinking">Procesando</button>
-        <button data-s="alert">Confirmar</button>
-        <button data-s="done">Registrado</button>
+        <button data-s="speaking">Hablando</button>
+        <button data-s="done">Exito</button>
+        <button data-s="alert">Confundido</button>
       </div>
 
       <div class="state-copy">
-        <p class="on" data-s="listening">Pupilas abiertas y el anillo girando. El micrófono está tomando y la frase ya se está transcribiendo.</p>
-        <p data-s="thinking">Mirada baja y ritmo lento. Está resolviendo una ambigüedad de terminología antes de escribir nada.</p>
-        <p data-s="alert">Ojos arriba. Escuchó “tres seis” y quiere que confirmes si es la pieza 3.6 antes de tocar el odontograma.</p>
-        <p data-s="done">Ojos cerrados, gesto de asentimiento. El dato ya quedó en la ficha con su marca de tiempo.</p>
+        <p class="on" data-s="listening"><span class="tint-sea">Escuchando (listening):</span> Ondas de voz reactivas al volumen del micrófono mientras el odontólogo dicta.</p>
+        <p data-s="thinking"><span class="tint-ind">Procesando / Pensando (thinking):</span> Movimiento de ojos y circuitos procesando el dictado y la terminología clínica.</p>
+        <p data-s="speaking"><span class="tint-amber">Hablando (speaking):</span> Sincronización labial dinámica cuando el asistente responde por síntesis de voz (TTS).</p>
+        <p data-s="done"><span class="tint-sea">Exito (success):</span> Expresión de confirmación al guardar un dato o acción en la ficha clínica.</p>
+        <p data-s="alert"><span class="tint-purp">Confundido / Error (confused):</span> Expresión de duda si el comando o término no fue claro, solicitando confirmación.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ CAPACIDADES ══════════ -->
-<section class="pad has-strip">
-  <div class="strip top" data-dir="1" aria-hidden="true"></div>
-  <div class="strip bottom" data-dir="-1" aria-hidden="true"></div>
+<!-- ══════════ CONTROL POR VOZ ══════════ -->
+<section class="pad" id="voz">
   <div class="wrap">
-    <p class="kicker rise" style="margin-bottom:1.75rem">Qué resuelve</p>
-    <h2 class="d2 rise d-1" style="max-width:16ch; margin-bottom:3.5rem">Pensado para el sillón, no para el escritorio.</h2>
+    <p class="kicker rise" style="margin-bottom:1.75rem">Instrucciones de Uso</p>
+    <h2 class="d2 rise d-1" style="max-width:18ch; margin-bottom:2.5rem">Como usar el control por voz.</h2>
+
+    <div class="grid-panels rise">
+      <div class="panel">
+        <div>
+          <p class="kicker" style="margin-bottom:.5rem">Paso 1</p>
+          <h3>Iniciar la Sesión</h3>
+          <p>Al cargar la aplicación en el navegador, concede el permiso de acceso al micrófono. Puedes activar o desactivar la escucha pulsando el botón flotante del micrófono o presionando la barra espaciadora.</p>
+        </div>
+        <div class="chip-list">
+          <span class="chip">Permiso de microfono</span>
+          <span class="chip">Boton flotante</span>
+          <span class="chip">Barra espaciadora</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div>
+          <p class="kicker" style="margin-bottom:.5rem">Paso 2</p>
+          <h3>Activación por Voz (Wake Word)</h3>
+          <p>Para comenzar a dictar, puedes llamar al asistente con cualquiera de las frases clave predefinidas o dictar el primer dato de forma continua.</p>
+        </div>
+        <div class="chip-list">
+          <span class="chip">"Hola DentisCraft"</span>
+          <span class="chip">"DentisCraft"</span>
+          <span class="chip">"Asistente"</span>
+          <span class="chip">"DentisCraft, el paciente es Juan Perez"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ COMANDOS Y EJEMPLOS DE DICTADO ══════════ -->
+<section class="pad" id="comandos">
+  <div class="wrap">
+    <p class="kicker rise" style="margin-bottom:1.75rem">Referencia de Comandos</p>
+    <h2 class="d2 rise d-1" style="max-width:20ch; margin-bottom:1rem">Comandos y ejemplos de dictado.</h2>
+    <p class="lead rise d-2" style="margin-bottom:3rem">El sistema reconoce dictados individuales o frases continuas compuestas estructurándolas en su campo correspondiente.</p>
+
+    <!-- Panel 1: Datos del Paciente -->
+    <div class="panel rise" style="margin-bottom:2rem">
+      <h3>1. Datos del Paciente</h3>
+      <p>Dictado de filiación general y datos de contacto.</p>
+      <table class="cmd-table">
+        <thead><tr><th>Campo</th><th>Ejemplo de lo que puedes decir</th></tr></thead>
+        <tbody>
+          <tr><td>Nombre</td><td>"Nombre Carlos Ortiz Ramirez" o "El paciente se llama Ana Morales"</td></tr>
+          <tr><td>Edad</td><td>"Edad 35" o "Tiene cuarenta y dos anos"</td></tr>
+          <tr><td>Fecha de nacimiento</td><td>"Fecha de nacimiento 15 de mayo de 1992"</td></tr>
+          <tr><td>Lugar de nacimiento</td><td>"Lugar de nacimiento Lima Peru"</td></tr>
+          <tr><td>Ocupacion</td><td>"Ocupacion docente" o "Trabaja como arquitecto"</td></tr>
+          <tr><td>Direccion</td><td>"Direccion Avenida Grau 245"</td></tr>
+          <tr><td>Telefono</td><td>"Telefono 987654321" o "Celular 987654321"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Panel 2: Antecedentes y Exploración -->
+    <div class="panel rise" style="margin-bottom:2rem">
+      <h3>2. Antecedentes y Exploracion Clinica</h3>
+      <p>Registro de anamnesis, historia médica y hallazgos iniciales.</p>
+      <table class="cmd-table">
+        <thead><tr><th>Seccion</th><th>Ejemplo de dictado</th></tr></thead>
+        <tbody>
+          <tr><td>Motivo de consulta</td><td>"Motivo de consulta dolor intenso al masticar en molar superior"</td></tr>
+          <tr><td>Alergias</td><td>"Alergia a la penicilina" o "Sin alergias conocidas"</td></tr>
+          <tr><td>Antecedentes</td><td>"Antecedentes hipertension arterial controlada" o "Sin antecedentes"</td></tr>
+          <tr><td>Habitos</td><td>"Habitos bruxismo nocturno y consumo ocasional de tabaco"</td></tr>
+          <tr><td>Inspeccion General</td><td>"Inspeccion general paciente lucido y orientado en tiempo y espacio"</td></tr>
+          <tr><td>Exploracion Bucal</td><td>"Exploracion bucal encias inflamadas a nivel de molares inferiores"</td></tr>
+          <tr><td>Observaciones</td><td>"Observaciones control en dos semanas para evaluar evolucion"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paneles 3 y 4 en grilla -->
+    <div class="grid-panels rise" style="margin-top:0; margin-bottom:2rem">
+      <div class="panel">
+        <div>
+          <h3>3. Odontograma por Voz</h3>
+          <p>Utiliza notación internacional FDI (11 a 48) o nombres anatómicos:</p>
+          <table class="cmd-table">
+            <thead><tr><th>Accion</th><th>Ejemplo de comando</th></tr></thead>
+            <tbody>
+              <tr><td>Marcar Caries</td><td>"Diente 47 caries oclusal" / "Pieza 16 caries mesial y oclusal"</td></tr>
+              <tr><td>Restaurado</td><td>"Pieza 24 restaurado oclusodistal" / "Diente 36 obturacion resina"</td></tr>
+              <tr><td>Ausente</td><td>"Pieza 18 ausente" / "Diente 28 extraido"</td></tr>
+              <tr><td>Sano / Limpiar</td><td>"Diente 47 sano" / "Limpiar pieza 16"</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div>
+          <h3>4. Presupuesto y Tratamiento</h3>
+          <p>Selección y cálculo de procedimientos del catálogo clínico:</p>
+          <table class="cmd-table">
+            <thead><tr><th>Accion</th><th>Ejemplo de comando</th></tr></thead>
+            <tbody>
+              <tr><td>Presupuesto base</td><td>"Presupuesto profilaxis y fluorizacion"</td></tr>
+              <tr><td>Agregar item</td><td>"Agregar curacion con resina y radiografia periapical"</td></tr>
+              <tr><td>Quitar item</td><td>"Quitar blanqueamiento"</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paneles 5, 6 y 7 en grilla -->
+    <div class="grid-panels rise" style="margin-top:0">
+      <div class="panel">
+        <div>
+          <h3>5. Evolucion Clinica y Pagos</h3>
+          <p>Para asentar sesiones de control o seguimiento:</p>
+          <p style="font-family:var(--mono); font-size:.875rem; color:var(--sea); margin-top:1rem">
+            "Evolucion diagnostico caries oclusal tratamiento curacion con resina a cuenta 50 saldo 30"
+          </p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div>
+          <h3>6. Navegacion y Correccion</h3>
+          <table class="cmd-table" style="margin-top:.5rem">
+            <tbody>
+              <tr><td>Corregir campo</td><td>"Corregir edad 38" / "Cambiar telefono a 912345678"</td></tr>
+              <tr><td>Navegacion</td><td>"Siguiente" / "Paso anterior"</td></tr>
+              <tr><td>Instrucciones</td><td>"Repite" / "Que falta"</td></tr>
+              <tr><td>Limpieza</td><td>"Borrar alergias" / "Limpiar odontograma"</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 7: Finalizar -->
+    <div class="panel rise" style="margin-top:2rem">
+      <h3>7. Finalizar y Generar Documento</h3>
+      <p>Cuando concluya la consulta odontológica:</p>
+      <ol style="margin:1rem 0 0 1.5rem; color:var(--ink-2); font-size:1rem; line-height:1.7">
+        <li>Di: <strong style="color:var(--sea); font-family:var(--mono)">"Finalizar documento"</strong> o <strong style="color:var(--sea); font-family:var(--mono)">"Eso seria todo"</strong>.</li>
+        <li>El sistema cambiara a la vista de Ficha Clinica y Odontograma Oficial.</li>
+        <li>El asistente preguntara si deseas enviar el documento al correo del paciente (puedes dictar: <em>"juan punto perez arroba gmail punto com"</em>) o descargar directamente el archivo PDF pulsando <strong>"Descargar PDF"</strong>.</li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ DICTADO FIJADO POR SCROLL ══════════ -->
+<section id="dictado">
+  <div class="pin-track" id="pinTrack" style="height:520vh">
+    <div class="pin">
+      <div class="pin-grid">
+
+        <div>
+          <p class="kicker" style="margin-bottom:1.75rem">Demostracion en Vivo · Consulta 04:12</p>
+          <div class="quotes" id="quotes">
+            <div class="quote"><span class="who">Odontologa</span>Nombre Carlos Ortiz Ramirez, 35 anos, acude por <em>dolor intenso al masticar en molar superior</em>.</div>
+            <div class="quote"><span class="who">Odontologa</span>Sin alergias conocidas. Antecedentes <em>hipertension arterial controlada</em>.</div>
+            <div class="quote"><span class="who">Odontologa</span>A la exploracion, <em>diente cuatro siete caries oclusal</em> profunda.</div>
+            <div class="quote"><span class="who">Odontologa</span>Tambien <em>pieza dos cuatro restaurado oclusodistal</em>.</div>
+            <div class="quote"><span class="who">Odontologa</span>Diagnostico <em>pulpitis reversible</em>. Presupuesto profilaxis y curacion con resina.</div>
+            <div class="quote"><span class="who">Odontologa</span>Evolucion a cuenta 50 saldo 30. <em>Finalizar documento</em>.</div>
+          </div>
+          <p class="dim" style="font-size:1rem; margin-top:2rem">Cada frase cae en su campo. El odontograma se marca al nombrar la pieza. Desliza para avanzar la consulta.</p>
+        </div>
+
+        <div class="doc" id="doc">
+          <div class="doc-top">
+            <div>
+              <h4>Historia clinica odontologica</h4>
+              <div class="sub">Carlos Ortiz Ramirez · 35 a · Control</div>
+            </div>
+            <div class="stamp" id="stamp">Borrador</div>
+          </div>
+
+          <div class="row" data-i="0"><div class="lab">Motivo de consulta</div><div class="val">Dolor intenso al masticar en molar superior</div></div>
+          <div class="row" data-i="1"><div class="lab">Anamnesis y Antecedentes</div><div class="val">Sin alergias. Hipertension arterial controlada.</div></div>
+          <div class="row" data-i="2"><div class="lab">Odontograma · FDI</div>
+            <div class="odo" id="odoSmall" aria-hidden="true"></div>
+          </div>
+          <div class="row" data-i="4"><div class="lab">Diagnostico y Presupuesto</div><div class="val">Pulpitis reversible — Profilaxis y curacion con resina</div></div>
+          <div class="row" data-i="5"><div class="lab">Evolucion y Pagos</div><div class="val">Curacion realizada. A cuenta: S/. 50.00 | Saldo: S/. 30.00</div></div>
+
+          <div class="progress-line">
+            <span class="stamp" id="pdfLabel">Esperando dictado</span>
+            <div class="track"><div class="fillbar" id="fillbar"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HISTORIAL CLÍNICO (PDF GENERADO) ══════════ -->
+<section class="pad" id="pdf">
+  <div class="wrap">
+    <p class="kicker rise" style="margin-bottom:1.75rem">Documentacion Oficial</p>
+    <h2 class="d2 rise d-1" style="max-width:20ch; margin-bottom:1rem">Que contiene el Historial Clinico (PDF Generado).</h2>
+    <p class="lead rise d-2" style="margin-bottom:3rem">El documento generado cumple con el formato estandar de historial clinico odontologico oficial en formato A4 de 2 paginas.</p>
+
+    <div class="grid-panels rise">
+      <div class="panel">
+        <div>
+          <p class="kicker" style="margin-bottom:.5rem">Estructura</p>
+          <h3>Pagina 1</h3>
+          <ul style="margin:1rem 0 0 1.25rem; color:var(--ink-2); font-size:1rem; line-height:1.8">
+            <li>Membrete y cabecera de la clinica dental.</li>
+            <li>Ficha de datos de filiacion del paciente.</li>
+            <li>Anamnesis: antecedentes patologicos, alergias, habitos y examen general.</li>
+            <li>Odontograma completo (cuadrantes superiores e inferiores) con simbologia en color de piezas y superficies.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div>
+          <p class="kicker" style="margin-bottom:.5rem">Estructura</p>
+          <h3>Pagina 2</h3>
+          <ul style="margin:1rem 0 0 1.25rem; color:var(--ink-2); font-size:1rem; line-height:1.8">
+            <li>Motivo de consulta y diagnostico clinico.</li>
+            <li>Tabla de Presupuesto y Plan de Tratamiento con totales calculados.</li>
+            <li>Tabla de Evolucion Clinica y Control de Pagos (Fecha, Diagnostico, Tratamiento, A Cuenta, Saldo).</li>
+            <li>Recuadro para firma del odontologo tratante y firma de conformidad del paciente.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ REQUISITOS PARA EL USUARIO ══════════ -->
+<section class="pad" id="requisitos" style="padding-top:0">
+  <div class="wrap">
+    <p class="kicker rise" style="margin-bottom:1.75rem">Especificaciones Tecnicas</p>
+    <h2 class="d2 rise d-1" style="max-width:18ch; margin-bottom:3rem">Requisitos para el usuario.</h2>
 
     <div class="rows">
-      <div class="erow rise"><div class="tag">Voz</div><h3>Vocabulario odontológico real</h3><p>Piezas en notación FDI, superficies, tipos de restauración, movilidad y grados de caries dictados en habla natural.</p></div>
-      <div class="erow rise"><div class="tag">Manos libres</div><h3>Sin romper esterilidad</h3><p>El profesional no toca ningún dispositivo durante el procedimiento. La sesión se abre y se cierra por voz.</p></div>
-      <div class="erow rise"><div class="tag">Control</div><h3>La última palabra es humana</h3><p>Nada se guarda sin revisión. La ficha queda marcada como borrador hasta que el odontólogo la aprueba, y cada campo se corrige por voz.</p></div>
-      <div class="erow rise"><div class="tag">Historial</div><h3>Continuidad entre citas</h3><p>Al abrir una consulta nueva trae el odontograma anterior y lo compara, para que el control sea sobre lo que ya existía.</p></div>
+      <div class="erow rise">
+        <div class="tag">Navegador</div>
+        <h3>Navegador recomendado</h3>
+        <p>Google Chrome, Microsoft Edge o cualquier navegador basado en Chromium (con soporte nativo para Web Speech API).</p>
+      </div>
+      <div class="erow rise">
+        <div class="tag">Permisos</div>
+        <h3>Permisos de microfono</h3>
+        <p>Habilitar el acceso al microfono en los ajustes de privacidad del navegador al cargar la aplicacion.</p>
+      </div>
+      <div class="erow rise">
+        <div class="tag">Entorno</div>
+        <h3>Entorno acustico</h3>
+        <p>Se recomienda un microfono con buena captacion o auriculares con microfono para minimizar el ruido ambiente durante la consulta.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -603,14 +812,14 @@ footer{border-top:1px solid var(--hair); padding:2rem 0 3rem}
   <div class="wrap">
     <p class="kicker rise" style="justify-content:center">The Next Crack</p>
     <h2 class="d2 rise d-1">Que la consulta vuelva a ser la consulta.</h2>
-    <p class="lead rise d-2" style="margin-inline:auto; text-align:center">DentisCraft no reemplaza al odontólogo. Le saca de encima la parte que nunca debió hacer con las manos.</p>
+    <p class="lead rise d-2" style="margin-inline:auto; text-align:center">DentisCraft no reemplaza al odontologo. Le saca de encima la parte que nunca debio hacer con las manos.</p>
     <div class="hero-cta rise d-3"><a href="#dictado" class="btn btn-fill">Ver el dictado otra vez</a></div>
   </div>
 </section>
 
 <footer>
   <div class="wrap foot">
-    <span>DentisCraft — Asistente clínico de voz</span>
+    <span>DentisCraft — Guia y Manual de Usuario</span>
     <span>Manosalva Peralta · Gavino Isidro · Aybar Escobar</span>
     <span>The Next Crack · 2026</span>
   </div>
@@ -626,10 +835,6 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine   = matchMedia('(pointer:fine)').matches;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
-/* ── Spring: damping ratio + response, como Apple los expone ──
-   damping 1.0 = crítico, sin overshoot (default de UI).
-   Es interrumpible: cambiar .to en cualquier frame no genera salto,
-   porque siempre integra desde el valor actual en pantalla.        */
 function Spring(value, damping, response){
   this.x=value; this.to=value; this.v=0;
   this.w=(2*Math.PI)/response; this.z=damping;
@@ -642,17 +847,16 @@ Spring.prototype.step=function(dt){
   return this.x;
 };
 
-/* progreso de scroll amortiguado (no lineal) */
 function damp(cur,to,dt,rate){ return to+(cur-to)*Math.exp(-rate*dt); }
 
-/* ══ chrome + nav ══ */
+/* chrome + nav */
 const nav=$('#nav'), chrome=$('#chrome');
 addEventListener('scroll',()=>{
   const on = scrollY>24;
   nav.classList.toggle('solid',on); chrome.classList.toggle('on',on);
 },{passive:true});
 
-/* píldora del nav con spring */
+/* nav pill */
 const navMid=$('#navMid'), navPill=$('#navPill'), navLinks=$$('#navMid a');
 const pillX=new Spring(0,1.0,.35), pillW=new Spring(0,1.0,.35);
 let pillOn=false;
@@ -667,7 +871,6 @@ navLinks.forEach(a=>{
 });
 navMid.addEventListener('pointerleave',()=>{ const h=$('#navMid a.here'); h?moveNavPill(h):(navPill.style.opacity='0',pillOn=false); });
 
-/* sección activa */
 const secIO=new IntersectionObserver(es=>{
   es.forEach(e=>{
     if(!e.isIntersecting) return;
@@ -675,15 +878,15 @@ const secIO=new IntersectionObserver(es=>{
     const h=$('#navMid a.here'); if(h && !navMid.matches(':hover')) moveNavPill(h);
   });
 },{rootMargin:'-45% 0px -50% 0px'});
-['consulta','dictado','odontograma','asistente','equipo'].forEach(id=>{const el=document.getElementById(id); if(el) secIO.observe(el);});
+['que-es','asistente','voz','comandos','dictado','pdf','requisitos','equipo'].forEach(id=>{const el=document.getElementById(id); if(el) secIO.observe(el);});
 
-/* ══ revelados ══ */
+/* revelados */
 const rIO=new IntersectionObserver(es=>{
   es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); rIO.unobserve(e.target); } });
 },{threshold:.15, rootMargin:'0px 0px -8% 0px'});
 $$('.rise').forEach(el=>rIO.observe(el));
 
-/* ══ hero: entrada palabra por palabra ══ */
+/* hero entrada */
 (function(){
   const h=$('#heroHead'); if(!h) return;
   const walk=(node)=>{
@@ -710,7 +913,7 @@ $$('.rise').forEach(el=>rIO.observe(el));
   });
 })();
 
-/* ══ declaración: palabras se encienden con el scroll ══ */
+/* declaracion scroll */
 const stmt=$('#stmt'); let stmtWords=[];
 if(stmt){
   const text=stmt.textContent.trim();
@@ -722,7 +925,7 @@ if(stmt){
   stmtWords=$$('.w',stmt);
 }
 
-/* ══ odontogramas ══ */
+/* odontograma */
 const FDI=[[18,17,16,15,14,13,12,11],[21,22,23,24,25,26,27,28],
            [48,47,46,45,44,43,42,41],[31,32,33,34,35,36,37,38]];
 function buildOdo(el){
@@ -735,20 +938,8 @@ function buildOdo(el){
   return map;
 }
 const teethS=buildOdo($('#odoSmall'));
-const teethB=buildOdo($('#odoBig'));
 
-/* odontograma grande: se marca al entrar en pantalla */
-const bIO=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(!e.isIntersecting) return;
-    setTimeout(()=>teethB[46]&&teethB[46].classList.add('caries'),260);
-    setTimeout(()=>teethB[36]&&teethB[36].classList.add('rest'),620);
-    bIO.disconnect();
-  });
-},{threshold:.35});
-if($('#odoBig')) bIO.observe($('#odoBig'));
-
-/* ══ cifras ══ */
+/* cifras */
 const cIO=new IntersectionObserver(es=>{
   es.forEach(e=>{
     if(!e.isIntersecting) return;
@@ -762,8 +953,8 @@ const cIO=new IntersectionObserver(es=>{
 },{threshold:.6});
 $$('[data-n]').forEach(el=>cIO.observe(el));
 
-/* ══ CARAS ══ */
-const COL={idle:'#5EC8AE', listening:'#5EC8AE', thinking:'#7C9CE8', alert:'#D89A8E', done:'#E0B571'};
+/* caras */
+const COL={idle:'#5EC8AE', listening:'#5EC8AE', thinking:'#7C9CE8', speaking:'#E0B571', alert:'#B598E8', done:'#5EC8AE'};
 function Face(ids){
   this.ring=$(ids.ring); this.l=$(ids.l); this.r=$(ids.r); this.m=$(ids.m); this.halo=$(ids.halo);
   this.state='listening'; this.blink=0; this.next=2400; this.gx=0; this.gy=0; this.tx=0; this.ty=0; this.nextGaze=0;
@@ -775,13 +966,14 @@ Face.prototype.set=function(s){
   if(this.m) this.m.setAttribute('stroke',c);
   if(this.ring){ this.ring.setAttribute('stroke',c); this.ring.setAttribute('stroke-opacity', s==='listening'?'.5':'.22'); }
   if(this.halo){
-    const rgb = s==='thinking'?'124,156,232' : s==='alert'?'216,154,142' : s==='done'?'224,181,113' : '94,200,174';
+    const rgb = s==='thinking'?'124,156,232' : s==='speaking'?'224,181,113' : s==='alert'?'181,152,232' : '94,200,174';
     this.halo.style.background=`radial-gradient(circle, rgba(${rgb},.24), transparent 60%)`;
   }
   if(!this.m) return;
   if(s==='done')          this.m.setAttribute('d','M104 162 Q130 180 156 162');
   else if(s==='alert')    this.m.setAttribute('d','M108 168 Q130 156 152 168');
   else if(s==='thinking') this.m.setAttribute('d','M108 166 L152 166');
+  else if(s==='speaking') this.m.setAttribute('d','M103 162 Q130 182 157 162');
   else                    this.m.setAttribute('d','M103 164 Q130 178 157 164');
 };
 Face.prototype.tick=function(dt,now){
@@ -795,6 +987,7 @@ Face.prototype.tick=function(dt,now){
   if(this.state==='done') ry=2.6;
   if(this.state==='thinking') ry=13;
   if(this.state==='alert') ry=22;
+  if(this.state==='speaking') ry=17;
 
   if(this.state==='thinking'){
     if(now>this.nextGaze){ this.tx=(Math.random()-.5)*1.5; this.ty=.55+Math.random()*.4; this.nextGaze=now+850+Math.random()*700; }
@@ -805,8 +998,9 @@ Face.prototype.tick=function(dt,now){
     this.l.setAttribute('cx',100+dx); this.l.setAttribute('cy',122+dy); this.l.setAttribute('ry',ry);
     this.r.setAttribute('cx',160+dx); this.r.setAttribute('cy',122+dy); this.r.setAttribute('ry',ry);
   }
-  if(this.m && this.state==='listening'){
-    this.amp=damp(this.amp,(Math.random()*12),dt,9);
+  if(this.m && (this.state==='listening' || this.state==='speaking')){
+    const maxA = this.state==='speaking'?18:10;
+    this.amp=damp(this.amp,(Math.random()*maxA),dt,9);
     this.m.setAttribute('d',`M103 164 Q130 ${166+this.amp} 157 164`);
   }
   if(this.ring) this.ring.style.transform=`rotate(${(now/90)%360}deg)`, this.ring.style.transformOrigin='130px 130px';
@@ -825,7 +1019,7 @@ if(fine){
   },{passive:true});
 }
 
-/* segmentado con spring; feedback en pointerdown */
+/* segmentado con spring */
 const seg=$('#seg'), segPill=$('#segPill'), segBtns=$$('#seg button'), copies=$$('.state-copy p');
 const sx=new Spring(0,1.0,.35), sw=new Spring(0,1.0,.35);
 let segInit=false;
@@ -842,8 +1036,7 @@ segBtns.forEach(b=>b.addEventListener('pointerdown',()=>selectSeg(b)));
 addEventListener('load',()=>{ const on=$('#seg button.on'); if(on) selectSeg(on); });
 addEventListener('resize',()=>{ const on=$('#seg button.on'); if(on){ const r=on.getBoundingClientRect(),p=seg.getBoundingClientRect(); sx.to=sx.x=r.left-p.left; sw.to=sw.x=r.width; } });
 
-
-/* ══ capas fotográficas: parallax lento y relevo por sección ══ */
+/* parallax de fotos de fondo */
 const phHero=$('#phHero'), phRoom=$('#phRoom'), phEnamel=$('#phEnamel');
 const photos=[phHero,phRoom,phEnamel].filter(Boolean);
 let phY=0;
@@ -854,7 +1047,6 @@ function movePhotos(dt){
     p.style.transform=`translate3d(0,${(-phY*k).toFixed(1)}px,0) scale(1.06)`;
   });
 }
-/* la foto cambia según dónde estés: consultorio → sala → esmalte */
 (function(){
   const marks=[
     {sel:'#dictado', el:phRoom},
@@ -872,24 +1064,21 @@ function movePhotos(dt){
   marks.forEach(m=>{const el=document.querySelector(m.sel); if(el) io.observe(el);});
 })();
 
-/* ══ FONDO 3D: pieza dental como nube de puntos ══
-   Superficie muestreada de una corona con cuatro cúspides y dos
-   raíces. Gira con el scroll, se inclina con el puntero. Sin brillos:
-   la profundidad se lee por tamaño y opacidad, no por saturación.  */
+/* Fondo 3D: diente en nube de puntos */
 const bgc=$('#bgCanvas'), g=bgc?bgc.getContext('2d'):null;
 let P=[], W=0, H=0, DPR=1;
 
 function buildTooth(n){
   const a=[];
   for(let i=0;i<n;i++){
-    if(Math.random()<.58){                       // corona
+    if(Math.random()<.58){
       const th=Math.random()*Math.PI*2;
       const v=Math.pow(Math.random(),.85);
       const y=v*1.0;
       let r=.58*Math.sqrt(Math.max(0,1-Math.pow(y/1.22,2)));
-      r*=1+.11*Math.cos(4*th)*(y/1.0);           // cúspides marcadas arriba
+      r*=1+.11*Math.cos(4*th)*(y/1.0);
       a.push({x:r*Math.cos(th), y:y-.15, z:r*Math.sin(th)*.86, c:0});
-    } else {                                     // raíces
+    } else {
       const side=Math.random()<.5?-1:1;
       const th=Math.random()*Math.PI*2;
       const v=Math.random();
@@ -916,7 +1105,7 @@ let spin=0, tiltX=0, tiltXTo=0, tiltY=0, tiltYTo=0;
 
 function drawTooth(dt){
   if(!g) return;
-  spin += (reduce?0:dt*.16) + scrollY*0.0000024;   // el scroll también la gira
+  spin += (reduce?0:dt*.16) + scrollY*0.0000024;
   tiltX=damp(tiltX,tiltXTo,dt,4); tiltY=damp(tiltY,tiltYTo,dt,4);
 
   g.clearRect(0,0,W,H);
@@ -935,9 +1124,8 @@ function drawTooth(dt){
     const k=f/(f-z2);
     const sx=cx + x1*s*k + tiltX*26;
     const sy=cy - y1*s*k;
-    const d=(z2+1)/2;                              // 0 atrás, 1 adelante
+    const d=(z2+1)/2;
     const r=(p.c?1.0:1.35)*k*(W>900?1:.8);
-    // corona en verde apagado, raíces en gris cálido — nada de neón
     g.fillStyle = p.c
       ? `rgba(196,186,172,${(.05+d*.16).toFixed(3)})`
       : `rgba(150,205,190,${(.05+d*.20).toFixed(3)})`;
@@ -945,13 +1133,11 @@ function drawTooth(dt){
   }
 }
 
-/* ══ CARRUSEL DE FONDO ══
-   Deriva constante + un empuje proporcional a la velocidad del scroll,
-   así la banda responde al gesto en vez de correr sola.               */
+/* carrusel */
 const tpl=$('#frames'), strips=$$('.strip');
 strips.forEach(st=>{
   if(!tpl) return;
-  for(let k=0;k<3;k++) st.appendChild(tpl.content.cloneNode(true));  // 3 pasadas = bucle sin costura
+  for(let k=0;k<3;k++) st.appendChild(tpl.content.cloneNode(true));
   st._x = 0; st._w = 0;
 });
 function measureStrips(){ strips.forEach(st=>{ st._w = st.scrollWidth/3; }); }
@@ -972,9 +1158,8 @@ function moveStrips(dt){
   });
 }
 
-/* ══ luz que sigue al cursor ══ */
+/* cursor spot */
 const spot=$('#spot'); let spX=innerWidth/2, spY=innerHeight/2, spXTo=spX, spYTo=spY;
-
 if(fine){
   addEventListener('pointermove',e=>{
     spXTo=e.clientX; spYTo=e.clientY;
@@ -983,11 +1168,11 @@ if(fine){
   },{passive:true});
 }
 
-/* ══ SECCIÓN FIJADA: el dictado, movido por el scroll ══ */
+/* dictado sticky */
 const track=$('#pinTrack'), quotes=$$('#quotes .quote'), rows=$$('#doc .row'),
       fillbar=$('#fillbar'), stamp=$('#stamp'), pdfLabel=$('#pdfLabel'), doc=$('#doc');
 const STEPS=quotes.length;
-let pinP=0;          // progreso amortiguado 0..1
+let pinP=0;
 const orbWrap=$('#orbWrap');
 
 function pinRaw(){
@@ -997,19 +1182,15 @@ function pinRaw(){
   return total>0 ? clamp(-r.top/total,0,1) : 0;
 }
 
-/* ══ bucle único, sincronizado a la pantalla ══ */
 let last=performance.now();
 function frame(now){
   const dt=Math.min((now-last)/1000,1/30); last=now;
 
-  /* springs de las píldoras */
   if(pillOn){ navPill.style.transform=`translate3d(${pillX.step(dt)}px,0,0)`; navPill.style.width=pillW.step(dt)+'px'; }
   if(segInit){ segPill.style.transform=`translate3d(${sx.step(dt)}px,0,0)`; segPill.style.width=sw.step(dt)+'px'; }
 
-  /* caras */
   heroFace.tick(dt,now); bigFace.tick(dt,now);
 
-  /* fondo */
   movePhotos(dt);
   drawTooth(dt);
   moveStrips(dt);
@@ -1019,14 +1200,12 @@ function frame(now){
   }
 
   if(!reduce){
-    /* hero: el orbe se aleja al hacer scroll (solo transform/opacity) */
     if(orbWrap){
       const p=clamp(scrollY/innerHeight,0,1);
       orbWrap.style.transform=`translate3d(0,${-p*90}px,0) scale(${1-p*.16})`;
       orbWrap.style.opacity=String(1-p*.85);
     }
 
-    /* declaración: encendido progresivo */
     if(stmtWords.length){
       const el=stmt.getBoundingClientRect();
       const p=clamp((innerHeight*.82-el.top)/(el.height+innerHeight*.32),0,1);
@@ -1034,9 +1213,8 @@ function frame(now){
       stmtWords.forEach((w,i)=>w.classList.toggle('lit',i<lit));
     }
 
-    /* dictado */
     if(track){
-      pinP=damp(pinP,pinRaw(),dt,9);              // scroll amortiguado
+      pinP=damp(pinP,pinRaw(),dt,9);
       const idx=pinP*(STEPS-.001);
       quotes.forEach((q,i)=>{
         const d=idx-i;
@@ -1048,11 +1226,10 @@ function frame(now){
         const i=parseInt(r.dataset.i,10);
         r.classList.toggle('on', idx>=i+.55);
       });
-      /* dientes */
-      const t46=teethS[46], t36=teethS[36];
-      if(t46) t46.classList.toggle('caries', idx>=2.55);
-      if(t36) t36.classList.toggle('rest',   idx>=3.55);
-      /* barra + sellos */
+      const t47=teethS[47], t24=teethS[24];
+      if(t47) t47.classList.toggle('caries', idx>=2.55);
+      if(t24) t24.classList.toggle('rest',   idx>=3.55);
+
       const prog=clamp((idx+1)/STEPS,0,1);
       fillbar.style.width=(prog*100).toFixed(1)+'%';
       const finished = idx>=STEPS-1.1;
@@ -1060,32 +1237,27 @@ function frame(now){
       stamp.classList.toggle('ready',finished);
       pdfLabel.textContent = finished?'PDF listo para firmar':(idx>=.4?'Estructurando ficha…':'Esperando dictado');
       pdfLabel.classList.toggle('ready',finished);
-      /* el documento "se materializa": escala + blur juntos */
+
       const e=clamp(1-Math.abs(pinRaw()-.5)*.18,.94,1);
       doc.style.transform=`translate3d(0,0,0) scale(${e})`;
-      /* la cara del hero acompaña el estado del dictado */
+
       const s = finished?'done' : (idx%1>.72?'thinking':'listening');
-      if(heroFace.state!==s && isVisible(track)) { heroFace.set(s); bigFaceFollow(s); }
+      if(heroFace.state!==s && isVisible(track)) { heroFace.set(s); }
     }
   }
   requestAnimationFrame(frame);
 }
 function isVisible(el){ const r=el.getBoundingClientRect(); return r.top<innerHeight && r.bottom>0; }
-function bigFaceFollow(s){ /* la sección del asistente manda sobre la cara grande */ }
 requestAnimationFrame(frame);
 
-/* si el usuario pide menos movimiento, mostramos la ficha completa */
 if(reduce){
   rows.forEach(r=>r.classList.add('on'));
-  if(teethS[46])teethS[46].classList.add('caries');
-  if(teethS[36])teethS[36].classList.add('rest');
-  if(teethB[46])teethB[46].classList.add('caries');
-  if(teethB[36])teethB[36].classList.add('rest');
+  if(teethS[47])teethS[47].classList.add('caries');
+  if(teethS[24])teethS[24].classList.add('rest');
   fillbar.style.width='100%'; stamp.textContent='Completa'; stamp.classList.add('ready');
   pdfLabel.textContent='PDF listo para firmar'; pdfLabel.classList.add('ready');
 }
 
-/* scroll suave sin secuestrar el scroll nativo */
 $$('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',e=>{
     const t=document.querySelector(a.getAttribute('href'));
